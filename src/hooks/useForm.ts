@@ -20,6 +20,26 @@ export function useUserForm() {
             departamento_nacimiento: "",
             ciudad_nacimiento: "",
          },
+         direccion_residencia: {
+            barrio: "",
+            direccion: "",
+            ciudad: "",
+            departamento: "",
+         },
+         // direccion_correspondencia: {
+         //    barrio: "",
+         //    direccion: "",
+         //    ciudad: "",
+         //    departamento: "",
+         // },
+         // datos_secundarios: {
+         //    sexo: "",
+         //    tipo_sangre: "",
+         //    personas_a_cargo: 0,
+         //    estado_civil: "",
+         //    celular1: "",
+         //    telefono_fijo: "",
+         // }
          // experienciaLaboral: false,
       },
       shouldUnregister: true,

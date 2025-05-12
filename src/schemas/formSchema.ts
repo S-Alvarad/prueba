@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { enum_tipo_documento } from '@/constants/enums'
+import { enum_tipo_documento, enum_sexo, enum_tipo_sangre, enum_estado_civil } from '@/constants/enums'
 
 const tieneHijosSchema = z.discriminatedUnion("tieneHijos", [
    z.object({
@@ -20,22 +20,33 @@ const LugarNacimientoSchema = z.object({
 });
 
 const DireccionesSchema = z.object({
-   barrio: z.string().optional(),
-   direccion: z.string().optional(),
-   ciudad: z.string().optional(),
-   departamento: z.string().optional(),
-});
+   departamento: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "El departamento es obligatorio.",
+   }),
+   ciudad: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "La ciudad es obligatoria.",
+   }),
+   barrio: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "El barrio es obligatorio.",
+   }),
+   direccion: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "La direccion es obligatoria.",
+   }),
+}).optional();
 
 const DatosSecundariosSchema = z.object({
-   sexo: z.enum(["M", "F"], {
-      required_error: "Seleccione un sexo.",
+   sexo: z.enum(
+      enum_sexo.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione un sexo."
    }),
-   tipo_sangre: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
-      required_error: "Seleccione un tipo de sangre.",
+   tipo_sangre: z.enum(
+      enum_tipo_sangre.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione un tipo de sangre."
    }),
    personas_a_cargo: z.coerce.number().optional(),
-   estado_civil: z.enum(["Soltero", "Casado", "Divorciado", "Viudo"], {
-      required_error: "Seleccione un estado civil.",
+   estado_civil: z.enum(
+      enum_estado_civil.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione un estado civil."
    }),
    celular1: z
       .string()
@@ -74,8 +85,8 @@ export const FormSchema = z.object({
    }),
    lugar_nacimiento: LugarNacimientoSchema.optional(),
    direccion_residencia: DireccionesSchema.optional(),
-   direccion_correspondencia: DireccionesSchema.optional(),
-   datos_secundarios: DatosSecundariosSchema.optional(),
+   // direccion_correspondencia: DireccionesSchema.optional(),
+   // datos_secundarios: DatosSecundariosSchema.optional(),
 })
 
 

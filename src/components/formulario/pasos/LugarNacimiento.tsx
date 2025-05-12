@@ -2,7 +2,6 @@
 
 import { UseFormReturn } from "react-hook-form"
 import { FormSchemaType } from '@/schemas/formSchema'
-import { FormInput } from '@/components/FormInput'
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -17,13 +16,14 @@ export function LugarNacimiento({ form }: FormInputProps) {
          <blockquote className="border-l-4 italic pl-6 dark:border-l-emerald-400 border-l-emerald-600">
             Los siguientes campos son opcionales
          </blockquote>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="grid gap-2">
                <Label htmlFor="pais_nacimiento">País de nacimiento</Label>
                <Input
                   id="pais_nacimiento"
                   {...form.register("lugar_nacimiento.pais_nacimiento")}
-                  placeholder="Ingresa tu país de nacimiento"
+                  placeholder="Ej: Colombia"
+                  style={{ fontStyle: 'italic' }}
                />
             </div>
             <div className="grid gap-2">
@@ -31,7 +31,8 @@ export function LugarNacimiento({ form }: FormInputProps) {
                <Input
                   id="departamento_nacimiento"
                   {...form.register("lugar_nacimiento.departamento_nacimiento")}
-                  placeholder="Ingresa tu departamento de nacimiento"
+                  placeholder="Ej: Valle del cauca"
+                  style={{ fontStyle: 'italic' }}
                />
             </div>
             <div className="grid gap-2">
@@ -39,7 +40,8 @@ export function LugarNacimiento({ form }: FormInputProps) {
                <Input
                   id="ciudad_nacimiento"
                   {...form.register("lugar_nacimiento.ciudad_nacimiento")}
-                  placeholder="Ingresa tu ciudad de nacimiento"
+                  placeholder="Ej: Cali"
+                  style={{ fontStyle: 'italic' }}
                />
             </div>
          </div>
