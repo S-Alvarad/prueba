@@ -21,11 +21,19 @@ const LugarNacimientoSchema = z.object({
 });
 
 const DireccionesSchema = z.object({
-   barrio: z.string().optional(),
-   direccion: z.string().optional(),
-   ciudad: z.string().optional(),
-   departamento: z.string().optional(),
-});
+   departamento: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "El departamento es obligatorio.",
+   }),
+   ciudad: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "La ciudad es obligatoria.",
+   }),
+   barrio: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "El barrio es obligatorio.",
+   }),
+   direccion: z.string({required_error: "El campo es obligatorio." }).min(1, {
+      message: "La direccion es obligatoria.",
+   }),
+}).optional();
 
 const DatosSecundariosSchema = z.object({
    sexo: z.enum(

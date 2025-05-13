@@ -3,14 +3,13 @@
 import { useState } from "react";
 
 // 1. Librerías de terceros
-import { UserRound } from 'lucide-react';
+import { Loader2, Send, UserRound } from "lucide-react"
 import { useUserForm } from '@/hooks/useForm'
 
 // 2. Utils o helpers
 import { cn } from "@/lib/utils"
 
 // 3. Componentes UI (shadcn/ui)
-import { Loader2, Send } from "lucide-react"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -20,6 +19,7 @@ import { toast } from "sonner"
 // 4. Componentes propios (más específicos)
 import { DatosBasicos } from '@/components/formulario/pasos/DatosBasicos'
 import { LugarNacimiento } from '@/components/formulario/pasos/LugarNacimiento'
+import { Direcciones } from '@/components/formulario/pasos/DireccionResidencia'
 import { DatosSecundarios } from '@/components/formulario/pasos/DatosSecundarios'
 import { Loader } from '@/components/loader'
 

@@ -5,7 +5,15 @@ import { FieldPath, UseFormReturn, FieldValues } from "react-hook-form"
 import { Input } from '@/components/ui/input'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 
-interface FormInputProps<T extends FieldValues> {
+// interface FormInputProps<T extends FieldValues> {
+//    form: UseFormReturn<T>
+//    name: FieldPath<T>
+//    label: string
+//    placeholder?: string
+//    props?: string
+// }
+
+interface FormInputProps<T extends FieldValues> extends Omit<React.ComponentProps<typeof Input>, 'form'> {
    form: UseFormReturn<T>
    name: FieldPath<T>
    label?: string
@@ -20,7 +28,9 @@ export function FormInput<T extends FieldValues>({
    label,
    type,
    placeholder,
-   description
+   description,
+   ...inputProps
+
 }: FormInputProps<T>) {
    return (
       <FormField
@@ -30,7 +40,7 @@ export function FormInput<T extends FieldValues>({
             <FormItem>
                <FormLabel>{label}</FormLabel>
                <FormControl>
-                  <Input type={type} placeholder={placeholder} {...field} />
+                  <Input placeholder={placeholder} {...field} {...inputProps} />
                </FormControl>
                <FormDescription className="italic dark:text-emerald-400 font-semibold text-emerald-600">
                   {description}
