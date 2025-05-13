@@ -4,3 +4,25 @@ export const enum_tipo_documento = [
    { label: "Cedula de Extranjeria", value: "CE" },
    { label: "Pasaporte", value: "PPT" },
 ];
+export const enum_sexo = [
+   { label: "Masculino", value: "M" },
+   { label: "Femenino", value: "F" },
+];
+export const enum_tipo_rh = [
+   { label: "O+", value: "O+" },
+   { label: "O-", value: "O-" },
+   { label: "A+", value: "A+" },
+   { label: "A-", value: "A-" },
+   { label: "B+", value: "B+" },
+   { label: "B-", value: "B-" },
+   { label: "AB+", value: "AB+" },
+   { label: "AB-", value: "AB-" },
+];
+export const enum_estado_civil = [
+   { label: "Soltero", value: "SOLTERO" },
+   { label: "Casado", value: "CASADO" },
+   { label: "Divorciado", value: "DIVORCIADO" },
+   { label: "Viudo", value: "VIUDO" },
+   { label: "Separado", value: "SEPARADO" },
+   { label: "Union libre", value: "UNION LIBRE" },
+];

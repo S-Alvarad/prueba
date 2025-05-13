@@ -3,20 +3,24 @@
 import { FieldPath, UseFormReturn, FieldValues } from "react-hook-form"
 
 import { Input } from '@/components/ui/input'
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 
 interface FormInputProps<T extends FieldValues> {
    form: UseFormReturn<T>
    name: FieldPath<T>
-   label: string
+   label?: string
+   type?: string
    placeholder?: string
+   description?: string
 }
 
 export function FormInput<T extends FieldValues>({
    form,
    name,
    label,
-   placeholder
+   type,
+   placeholder,
+   description
 }: FormInputProps<T>) {
    return (
       <FormField
@@ -26,9 +30,12 @@ export function FormInput<T extends FieldValues>({
             <FormItem>
                <FormLabel>{label}</FormLabel>
                <FormControl>
-                  <Input placeholder={placeholder} {...field} />
+                  <Input type={type} placeholder={placeholder} {...field} />
                </FormControl>
-               <FormMessage />
+               <FormDescription className="italic dark:text-emerald-400 font-semibold text-emerald-600">
+                  {description}
+               </FormDescription>
+               {/* <FormMessage /> */}
             </FormItem>
          )}
       />

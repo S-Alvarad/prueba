@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import { FieldPath, UseFormReturn, FieldValues } from "react-hook-form"
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface FormInputProps<T extends FieldValues> {
@@ -13,6 +13,7 @@ interface FormInputProps<T extends FieldValues> {
    label: string
    array: { value: string; label: string }[]
    placeholder?: string
+   description?: string
 }
 
 export function FormSelect<T extends FieldValues>({
@@ -20,7 +21,8 @@ export function FormSelect<T extends FieldValues>({
    name,
    label,
    array,
-   placeholder
+   placeholder,
+   description
 }: FormInputProps<T>) {
 
    const selectOptions = useMemo(() => {
@@ -52,7 +54,10 @@ export function FormSelect<T extends FieldValues>({
                      {selectOptions}
                   </SelectContent>
                </Select>
-               <FormMessage />
+               <FormDescription className="italic dark:text-emerald-400 font-semibold text-emerald-600">
+                  {description}
+               </FormDescription>
+               {/* <FormMessage /> */}
             </FormItem>
          )}
       />

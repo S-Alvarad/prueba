@@ -1,15 +1,16 @@
 import { z } from "zod"
-import { enum_tipo_documento } from '@/constants/enums'
+import { enum_tipo_documento, enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
 
-const tieneHijosSchema = z.discriminatedUnion("tieneHijos", [
+const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
    z.object({
-      tieneHijos: z.literal(true),
-      numero_hijos: z.coerce.number({
-         invalid_type_error: "Este campo es obligatorio."
+      tiene_hijos: z.literal(true),
+      numero_hijos: z.string({
+         invalid_type_error: "Este campo es obligatorio.",
+         message: "Este campo es obligatorio."
       }),
    }),
    z.object({
-      tieneHijos: z.literal(false),
+      tiene_hijos: z.literal(false),
    })
 ])
 
@@ -27,29 +28,30 @@ const DireccionesSchema = z.object({
 });
 
 const DatosSecundariosSchema = z.object({
-   sexo: z.enum(["M", "F"], {
-      required_error: "Seleccione un sexo.",
+   sexo: z.enum(
+      enum_sexo.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione un sexo."
    }),
-   tipo_sangre: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
-      required_error: "Seleccione un tipo de sangre.",
+   tipo_sangre: z.enum(
+      enum_tipo_rh.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione tipo de RH."
    }),
-   personas_a_cargo: z.coerce.number().optional(),
-   estado_civil: z.enum(["Soltero", "Casado", "Divorciado", "Viudo"], {
-      required_error: "Seleccione un estado civil.",
+   estado_civil: z.enum(
+      enum_estado_civil.map(option => option.value) as [string, ...string[]], {
+      message: "Seleccione un estado civil."
    }),
-   celular1: z
-      .string()
+   personas_a_cargo: z.string().optional(),
+   celular: z.string()
       .min(1, { message: "Este campo es obligatorio" })
       .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
       .regex(/^\d+$/, { message: "Debe contener solo números" }),
-   telefono_fijo: z
-      .string()
+   telefono: z.string()
       .regex(/^\d+$/, { message: "Debe contener solo números" })
       .min(7, { message: "Debe tener al menos 7 dígitos" })
       .max(10, { message: "Debe tener máximo 10 dígitos" })
       .or(z.literal(""))
       .optional(),
-}).and(tieneHijosSchema);
+});
 
 export const FormSchema = z.object({
    tipo_documento: z.enum(
@@ -63,20 +65,23 @@ export const FormSchema = z.object({
    }),
    primer_nombre: z.string().min(1, {
       message: "El nombre es obligatorio.",
-   }),
-   segundo_nombre: z.string().optional(),
+   }).transform(val => val.toUpperCase()),
+   segundo_nombre: z.string().transform(val => val.toUpperCase()).optional(),
    primer_apellido: z.string().min(1, {
       message: "El apellido es obligatorio.",
-   }),
-   segundo_apellido: z.string().optional(),
+   }).transform(val => val.toUpperCase()),
+   segundo_apellido: z.string() .transform(val => val.toUpperCase()).optional(),
    fecha_nacimiento: z.date({
       required_error: "Este campo es obligatorio."
    }),
    lugar_nacimiento: LugarNacimientoSchema.optional(),
-   direccion_residencia: DireccionesSchema.optional(),
-   direccion_correspondencia: DireccionesSchema.optional(),
-   datos_secundarios: DatosSecundariosSchema.optional(),
+   // direccion_residencia: DireccionesSchema.optional(),
+   // direccion_correspondencia: DireccionesSchema.optional(),
+   // datos_secundarios: DatosSecundariosSchema.optional(),
 })
+// .and(LugarNacimientoSchema)
+.and(DatosSecundariosSchema)
+.and(tieneHijosSchema);
 
 
 
