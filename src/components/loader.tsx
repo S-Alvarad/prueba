@@ -8,7 +8,7 @@ export function Loader() {
    return (
       <div
          className="fixed inset-0 flex items-center justify-center z-50"
-         style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+         style={{ backgroundColor: 'rgba(0, 0, 0, 0.471)' }}
       >
          <Ring2
             size={40}

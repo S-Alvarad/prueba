@@ -8,19 +8,39 @@ export function useUserForm() {
       mode: "onBlur",
       resolver: zodResolver(FormSchema),
       defaultValues: {
-         tipo_documento: "",
-         num_documento: "",
-         primer_nombre: "",
+         tipo_documento: "CC",
+         num_documento: "1143994968",
+         primer_nombre: "steven",
          segundo_nombre: "",
-         primer_apellido: "",
-         segundo_apellido: "",
-         fecha_nacimiento: undefined,
-         lugar_nacimiento: {
-            pais_nacimiento: "",
-            departamento_nacimiento: "",
-            ciudad_nacimiento: "",
+         primer_apellido: "alvarado",
+         segundo_apellido: "paez",
+         fecha_nacimiento: new Date('1999-02-07'),
+
+         pais_nacimiento: "colombia",
+         departamento_nacimiento: "valle del cauca",
+         ciudad_nacimiento: "cali",
+
+         direccion_residencia: {
+            direccion: "Cra. 8 #10-47",
+            barrio: "La Merced",
+            ciudad: "Cali",
+            departamento: "Valle del Cauca",
          },
-         // experienciaLaboral: false,
+
+         direccion_correspondencia: {
+            direccion: "Cra. 8 #10-47",
+            barrio: "La Merced",
+            ciudad: "Cali",
+            departamento: "Valle del Cauca",
+         },
+
+         sexo: "M",
+         tipo_sangre: "O+",
+         personas_a_cargo: "2",
+         estado_civil: "SOLTERO",
+         celular: "3192976668",
+         telefono: "",
+         tiene_hijos: false,
       },
       shouldUnregister: true,
    });

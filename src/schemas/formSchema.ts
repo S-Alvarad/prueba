@@ -15,24 +15,16 @@ const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
 ])
 
 const LugarNacimientoSchema = z.object({
-   pais_nacimiento: z.string().optional(),
-   departamento_nacimiento: z.string().optional(),
-   ciudad_nacimiento: z.string().optional(),
+   pais_nacimiento: z.string({ required_error: "El campo es obligatorio." }).transform(val => val.toUpperCase()).optional(),
+   departamento_nacimiento: z.string({ required_error: "El campo es obligatorio." }).transform(val => val.toUpperCase()).optional(),
+   ciudad_nacimiento: z.string({ required_error: "El campo es obligatorio." }).transform(val => val.toUpperCase()).optional(),
 });
 
 const DireccionesSchema = z.object({
-   departamento: z.string({required_error: "El campo es obligatorio." }).min(1, {
-      message: "El departamento es obligatorio.",
-   }),
-   ciudad: z.string({required_error: "El campo es obligatorio." }).min(1, {
-      message: "La ciudad es obligatoria.",
-   }),
-   barrio: z.string({required_error: "El campo es obligatorio." }).min(1, {
-      message: "El barrio es obligatorio.",
-   }),
-   direccion: z.string({required_error: "El campo es obligatorio." }).min(1, {
-      message: "La direccion es obligatoria.",
-   }),
+   departamento: z.string({ required_error: "El campo es obligatorio." }).min(1, { message: "El departamento es obligatorio." }).transform(val => val.toUpperCase()),
+   ciudad: z.string({ required_error: "El campo es obligatorio." }).min(1, { message: "La ciudad es obligatoria." }).transform(val => val.toUpperCase()),
+   barrio: z.string({ required_error: "El campo es obligatorio." }).min(1, { message: "El barrio es obligatorio." }).transform(val => val.toUpperCase()),
+   direccion: z.string({ required_error: "El campo es obligatorio." }).min(1, { message: "La direccion es obligatoria." }).transform(val => val.toUpperCase()),
 }).optional();
 
 const DatosSecundariosSchema = z.object({
@@ -78,18 +70,19 @@ export const FormSchema = z.object({
    primer_apellido: z.string().min(1, {
       message: "El apellido es obligatorio.",
    }).transform(val => val.toUpperCase()),
-   segundo_apellido: z.string() .transform(val => val.toUpperCase()).optional(),
+   segundo_apellido: z.string().transform(val => val.toUpperCase()).optional(),
    fecha_nacimiento: z.date({
       required_error: "Este campo es obligatorio."
    }),
-   lugar_nacimiento: LugarNacimientoSchema.optional(),
-   // direccion_residencia: DireccionesSchema.optional(),
-   // direccion_correspondencia: DireccionesSchema.optional(),
+   // lugar_nacimiento: LugarNacimientoSchema.optional(),
+   direccion_residencia: DireccionesSchema.optional(),
+   direccion_correspondencia: DireccionesSchema.optional(),
    // datos_secundarios: DatosSecundariosSchema.optional(),
 })
-// .and(LugarNacimientoSchema)
-.and(DatosSecundariosSchema)
-.and(tieneHijosSchema);
+   .and(LugarNacimientoSchema)
+   // DireccionesSchema
+   .and(DatosSecundariosSchema)
+   .and(tieneHijosSchema);
 
 
 

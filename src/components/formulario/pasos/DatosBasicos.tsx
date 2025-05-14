@@ -1,6 +1,6 @@
 "use client"
 
-import { FieldPath, UseFormReturn, FieldValues } from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -16,10 +16,10 @@ interface FormInputProps {
    form: UseFormReturn<FormSchemaType>
 }
 
-export function DatosBasicos({ form }: FormInputProps) {
+function DatosBasicos({ form }: FormInputProps) {
    return (
       <>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <FormSelect<FormSchemaType>
                form={form}
                name="tipo_documento"
@@ -44,7 +44,7 @@ export function DatosBasicos({ form }: FormInputProps) {
             />
             <div className="grid gap-2">
                <Label htmlFor="segundo_nombre">Segundo nombre</Label>
-               <Input id="segundo_nombre" placeholder="Ingresa tu primer nombre" {...form.register("segundo_nombre")}/>
+               <Input id="segundo_nombre" placeholder="Ingresa tu primer nombre" {...form.register("segundo_nombre")} />
                <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
             </div>
             <FormInput<FormSchemaType>
@@ -56,19 +56,45 @@ export function DatosBasicos({ form }: FormInputProps) {
             />
             <div className="grid gap-2">
                <Label htmlFor="segundo_apellido">Segundo apellido</Label>
-               <Input id="segundo_apellido" placeholder="Ingresa tu segundo apellido" {...form.register("segundo_apellido")}/>
+               <Input id="segundo_apellido" placeholder="Ingresa tu segundo apellido" {...form.register("segundo_apellido")} />
                <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
             </div>
          </div>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormDatePicker<FormSchemaType>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* <FormDatePicker<FormSchemaType>
                form={form}
                name="fecha_nacimiento"
                label="Fecha de nacimiento"
-               placeholder="Fecha de nacimiento"
-               description="Su fecha de nacimiento se utiliza para calcular su edad."
-            />
+               placeholder="YYYY-MM-DD."
+               description="Se utiliza para calcular su edad."
+            /> */}
+            <div className="grid gap-2">
+               <Label htmlFor="fecha_nacimiento">Fecha de nacimiento</Label>
+               <Input
+                  type="date"
+                  id="fecha_nacimiento"
+                  placeholder="YYYY-MM-DD"
+                  value={form.watch("fecha_nacimiento")?.toISOString().split("T")[0] || ""} // Convierte el valor de Date a string en formato YYYY-MM-DD
+                  {...form.register("fecha_nacimiento", { required: true })}
+               />
+               {form.formState.errors.fecha_nacimiento?.type === "required" && (
+                  <p role="alert">La fecha de nacimiento es obligatoria</p>
+               )}
+            </div>
+
+
+            {/* <FormInput<FormSchemaType>
+               form={form}
+               name="fecha_nacimiento"
+               label="Fecha de nacimiento"
+               type={"date"}
+               placeholder="YYYY-MM-DD."
+               description="Campo obligatorio."
+               className="w-full"
+            /> */}
          </div>
       </>
    )
 }
+
+export default DatosBasicos
