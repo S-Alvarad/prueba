@@ -54,7 +54,7 @@ export function FormSelect<T extends FieldValues>({
                      {selectOptions}
                   </SelectContent>
                </Select>
-               <FormDescription className="italic dark:text-emerald-400 font-semibold text-emerald-600">
+               <FormDescription className="italic dark:text-emerald-400 text-emerald-600">
                   {description}
                </FormDescription>
                {/* <FormMessage /> */}

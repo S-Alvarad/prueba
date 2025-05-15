@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 
 import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
-import { FormDatePicker } from '@/components/FormDatePicker'
+// import { FormDatePicker } from '@/components/FormDatePicker'
 
 import { FormSchemaType } from '@/schemas/formSchema'
 import { enum_tipo_documento } from '@/constants/enums'
@@ -61,38 +61,25 @@ function DatosBasicos({ form }: FormInputProps) {
             </div>
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* <FormDatePicker<FormSchemaType>
-               form={form}
-               name="fecha_nacimiento"
-               label="Fecha de nacimiento"
-               placeholder="YYYY-MM-DD."
-               description="Se utiliza para calcular su edad."
-            /> */}
             <div className="grid gap-2">
                <Label htmlFor="fecha_nacimiento">Fecha de nacimiento</Label>
                <Input
                   type="date"
                   id="fecha_nacimiento"
                   placeholder="YYYY-MM-DD"
-                  value={form.watch("fecha_nacimiento")?.toISOString().split("T")[0] || ""} // Convierte el valor de Date a string en formato YYYY-MM-DD
-                  {...form.register("fecha_nacimiento", { required: true })}
+                  aria-invalid={!!form.formState.errors.fecha_nacimiento}
+                  {...form.register("fecha_nacimiento")}
                />
-               {form.formState.errors.fecha_nacimiento?.type === "required" && (
-                  <p role="alert">La fecha de nacimiento es obligatoria</p>
-               )}
+               <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                  Campo obligatorio.
+               </p>
+               {/* {form.formState.errors.fecha_nacimiento?.type === "invalid_date" && (
+                  <p className="italic dark:text-red-400 text-sm text-red-600">La fecha de nacimiento es obligatoria</p>
+               )} */}
             </div>
-            {/* <FormInput<FormSchemaType>
-               form={form}
-               name="fecha_nacimiento"
-               label="Fecha de nacimiento"
-               type={"date"}
-               placeholder="YYYY-MM-DD."
-               description="Campo obligatorio."
-               className="w-full"
-            /> */}
          </div>
       </>
    )
 }
-
+// aria-invalid
 export default DatosBasicos

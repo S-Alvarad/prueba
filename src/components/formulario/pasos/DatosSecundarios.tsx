@@ -99,18 +99,10 @@ function DatosSecundarios({ form }: FormInputProps) {
                )}
             />
             {tineHijos && (
-               // <FormInput<FormSchemaType>
-               //    form={form}
-               //    name="numero_hijos"
-               //    type="number"
-               //    // label="No° Personas a su cargo"
-               //    placeholder="Ingresa No° numero de hijos"
-               // />
-
                <div className="grid gap-2">
                   <Input
                      type="number"
-                     {...form.register("numero_hijos", { valueAsNumber: true })}
+                     {...form.register("numero_hijos")}
                      placeholder="Ingresa No° numero de hijos"
                   />
                   <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>

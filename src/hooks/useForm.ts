@@ -14,7 +14,8 @@ export function useUserForm() {
          segundo_nombre: "",
          primer_apellido: "alvarado",
          segundo_apellido: "paez",
-         fecha_nacimiento: new Date('1999-02-07'),
+         // fecha_nacimiento: undefined,
+         fecha_nacimiento: new Date(),
 
          pais_nacimiento: "colombia",
          departamento_nacimiento: "",
@@ -28,20 +29,19 @@ export function useUserForm() {
          },
 
          direccion_correspondencia: {
-            direccion: "Cra. 8 #10-47",
-            barrio: "La Merced",
-            ciudad: "Cali",
-            departamento: "Valle del Cauca",
+            direccion: "",
+            barrio: "",
+            ciudad: "",
+            departamento: "",
          },
 
          sexo: "M",
          tipo_sangre: "O+",
-         personas_a_cargo: "2",
+         personas_a_cargo: 2,
          estado_civil: "SOLTERO",
          celular: "3192976668",
          telefono: "",
          tiene_hijos: false,
-         // numero_hijos: "", // ¡Esto es clave!
       },
       shouldUnregister: true,
    });

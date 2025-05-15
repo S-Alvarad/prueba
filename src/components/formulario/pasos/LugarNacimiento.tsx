@@ -13,9 +13,6 @@ interface FormInputProps {
 function LugarNacimiento({ form }: FormInputProps) {
    return (
       <>
-         {/* <blockquote className="border-l-4 italic pl-6 dark:border-l-emerald-400 border-l-emerald-600">
-            Los siguientes campos son opcionales
-         </blockquote> */}
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="grid gap-2">
                <Label htmlFor="pais_nacimiento">País de nacimiento</Label>
@@ -25,6 +22,9 @@ function LugarNacimiento({ form }: FormInputProps) {
                   placeholder="Ej: Colombia"
                   style={{ fontStyle: 'italic' }}
                />
+               <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                  Campo obligatorio.
+               </p>
             </div>
             <div className="grid gap-2">
                <Label htmlFor="departamento_nacimiento">Departamento de nacimiento</Label>
@@ -34,6 +34,9 @@ function LugarNacimiento({ form }: FormInputProps) {
                   placeholder="Ej: Valle del cauca"
                   style={{ fontStyle: 'italic' }}
                />
+               <p className="text-sm italic text-muted-foreground">
+                  Este campo no es obligatorio.
+               </p>
             </div>
             <div className="grid gap-2">
                <Label htmlFor="ciudad_nacimiento">Ciudad de nacimiento</Label>
@@ -43,6 +46,9 @@ function LugarNacimiento({ form }: FormInputProps) {
                   placeholder="Ej: Cali"
                   style={{ fontStyle: 'italic' }}
                />
+               <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                  Campo obligatorio.
+               </p>
             </div>
          </div>
       </>

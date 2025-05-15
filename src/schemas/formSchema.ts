@@ -1,26 +1,16 @@
 import { z } from "zod"
 import { enum_tipo_documento, enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
 
-const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
-   z.object({
-      tiene_hijos: z.literal(true),
-      numero_hijos: z.string({
-         invalid_type_error: "Este campo es obligatorio.",
-         message: "Este campo es obligatorio."
-      }),
-   }),
-   z.object({
-      tiene_hijos: z.literal(false),
-   })
-])
-
 const LugarNacimientoSchema = z.object({
-   pais_nacimiento: z.string({ required_error: "El campo es obligatorio." }).transform(val => val.toUpperCase()).optional(),
+   pais_nacimiento: z.string({
+      required_error: "El campo es obligatorio."
+   }).transform(val => val.toUpperCase()).optional(),
    departamento_nacimiento: z.string().transform(val => val.toUpperCase()).optional(),
-   ciudad_nacimiento: z.string({ required_error: "El campo es obligatorio." }).transform(val => val.toUpperCase()).optional(),
+   ciudad_nacimiento: z.string({
+      required_error: "El campo es obligatorio."
+   }).transform(val => val.toUpperCase()).optional(),
 });
-
-const DireccionesSchema = z.object({
+const DireccionResidenciaSchema = z.object({
    barrio: z.string({
       required_error: "El campo es obligatorio."
    }).min(1, {
@@ -41,8 +31,13 @@ const DireccionesSchema = z.object({
    }).min(1, {
       message: "La direccion es obligatoria."
    }).transform(val => val.toUpperCase()),
-}).optional();
-
+})
+const DireccionCorrespondenciaSchema = z.object({
+   barrio: z.string().transform(val => val.toUpperCase()),
+   departamento: z.string().transform(val => val.toUpperCase()),
+   ciudad: z.string().transform(val => val.toUpperCase()),
+   direccion: z.string().transform(val => val.toUpperCase()),
+})
 const DatosSecundariosSchema = z.object({
    sexo: z.enum(
       enum_sexo.map(option => option.value) as [string, ...string[]], {
@@ -56,7 +51,7 @@ const DatosSecundariosSchema = z.object({
       enum_estado_civil.map(option => option.value) as [string, ...string[]], {
       message: "Seleccione un estado civil."
    }),
-   personas_a_cargo: z.string().optional(),
+   personas_a_cargo: z.coerce.number().optional(),
    celular: z.string()
       .min(1, { message: "Este campo es obligatorio" })
       .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
@@ -68,6 +63,18 @@ const DatosSecundariosSchema = z.object({
       .or(z.literal(""))
       .optional(),
 });
+const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
+   z.object({
+      tiene_hijos: z.literal(true),
+      numero_hijos: z.coerce.number({
+         invalid_type_error: "Este campo es obligatorio.",
+         message: "Este campo es obligatorio."
+      }),
+   }),
+   z.object({
+      tiene_hijos: z.literal(false),
+   })
+])
 
 export const FormSchema = z.object({
    tipo_documento: z.enum(
@@ -87,16 +94,13 @@ export const FormSchema = z.object({
       message: "El apellido es obligatorio.",
    }).transform(val => val.toUpperCase()),
    segundo_apellido: z.string().transform(val => val.toUpperCase()).optional(),
-   fecha_nacimiento: z.date({
+   fecha_nacimiento: z.coerce.date({
       required_error: "Este campo es obligatorio."
    }),
-   // lugar_nacimiento: LugarNacimientoSchema.optional(),
-   direccion_residencia: DireccionesSchema,
-   direccion_correspondencia: DireccionesSchema.optional(),
-   // datos_secundarios: DatosSecundariosSchema.optional(),
+   direccion_residencia: DireccionResidenciaSchema,
+   direccion_correspondencia: DireccionCorrespondenciaSchema,
 })
    .and(LugarNacimientoSchema)
-   // DireccionesSchema
    .and(DatosSecundariosSchema)
    .and(tieneHijosSchema);
 

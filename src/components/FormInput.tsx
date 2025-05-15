@@ -44,10 +44,10 @@ export function FormInput<T extends FieldValues>({
                <FormDescription
                   className={
                      tipo === "residencia"
-                        ? "italic dark:text-emerald-400 font-semibold text-emerald-600"
+                        ? "italic dark:text-emerald-400 text-emerald-600"
                         : tipo === "correspondencia"
                            ? "text-sm italic text-muted-foreground"
-                           : "italic dark:text-emerald-400 font-semibold text-emerald-600" // Estilo por defecto
+                           : "italic dark:text-emerald-400 text-emerald-600" // Estilo por defecto
                   }
                >
                   {tipo === "residencia"

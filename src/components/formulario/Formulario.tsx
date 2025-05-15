@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect, Suspense, lazy } from "react";
+import { useState, useEffect, lazy } from "react";
 
 // 1. Librerías de terceros
-import { Loader2, Send, UserRound, ChevronLeft } from "lucide-react"
+import { Loader2, Send, UserRound, ChevronLeft, Terminal } from "lucide-react"
 import { useUserForm } from '@/hooks/useForm'
 
 // 2. Utils o helpers
@@ -14,9 +14,11 @@ import { Form } from "@/components/ui/form"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } 
-from "@/components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious }
+   from "@/components/ui/pagination"
 import { toast } from "sonner"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
 
 // 4. Componentes propios (más específicos)
 import { Loader } from '@/components/loader'
@@ -31,10 +33,10 @@ import { FormSchemaType } from '@/schemas/formSchema'
 
 
 export function Formulario({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-   const [step, setStep] = useState(1);            // paginado
    const [loading, setLoading] = useState(false);  // loading
-   // const [formData, setFormData] = useState({});   // Objeto para el POST
-   // const [formData, setFormData] = useState<FormSchemaType>({} as FormSchemaType);   // Objeto para el POST
+   const [step, setStep] = useState(1);            // paso actual
+   const [formData, setFormData] = useState({});   // datos acumulados
+   // const [formData, setFormData] = useState<FormSchemaType>({} as FormSchemaType);   // datos acumulados
 
    // 1. Define your form.
    const form = useUserForm();
@@ -47,8 +49,8 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
       //    ...values,
       // };
       // console.log(finalData);
-      // setLoading(true);
 
+      setLoading(true);
       try {
          const response = await fetch("http://192.168.120.97:4000/api/persona", {
             method: "POST",
@@ -80,7 +82,7 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
 
             // ✅ Aquí formateamos (reseteamos) el formulario:
             form.reset();
-         }, 3000); // 3000 milisegundos = 3 segundos
+         }, 2000); // 3000 milisegundos = 3 segundos
 
       } catch (error: any) {
          console.error("Error al enviar datos:", error);
@@ -92,9 +94,9 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
       }
    }
 
-   // useEffect(() => {
-   //    console.log(form.formState.errors);
-   // }, [form.formState.errors]);
+   useEffect(() => {
+      console.log(form.formState.errors);
+   }, [form.formState.errors]);
 
    return (
       <>
@@ -115,23 +117,48 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
                   <Form {...form}>
                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <div className="grid gap-6">
-                           <Suspense fallback={<Loader />}>
-                              {step === 1 && (
-                                 <>
-                                    <DatosBasicos form={form} />
-                                    <LugarNacimiento form={form} />
-                                    <DatosSecundarios form={form} />
-                                    <Direcciones form={form} tipo="residencia" />
-                                    <Direcciones form={form} tipo="correspondencia" />
-                                 </>
-                              )}
-                              {step === 2 && (
-                                 <>
-                                 </>
-                              )}
-                           </Suspense>
+                           {step === 1 && (
+                              <>
+                                 <DatosBasicos form={form} />
+                                 <LugarNacimiento form={form} />
+                                 <DatosSecundarios form={form} />
+                                 <Direcciones form={form} tipo="residencia" />
+                                 <Direcciones form={form} tipo="correspondencia" />
+                              </>
+                           )}
+                           {step === 2 && (
+                              <>
+                                 <Alert>
+                                    <Terminal className="h-4 w-4" />
+                                    <AlertTitle>Heads up!</AlertTitle>
+                                    <AlertDescription>
+                                       You can add components to your app using the cli.
+                                    </AlertDescription>
+                                 </Alert>
+                              </>
+                           )}
                            <Separator />
-                           <Button type="submit" className="w-auto" disabled={loading}>
+
+                           <Pagination className="block">
+                              <PaginationContent className="justify-between">
+                                 <PaginationItem>
+                                    <PaginationPrevious
+                                       className={cn(buttonVariants({ variant: "outline" }))}
+                                       onClick={() => setStep((prev) => prev - 1)}
+                                    />
+                                 </PaginationItem>
+                                 <PaginationItem className="">
+                                    <PaginationNext
+                                       className={cn(buttonVariants({ variant: "outline" }))}
+                                       onClick={
+                                          form.handleSubmit(onSubmit)
+                                          // () => setStep((prev) => prev + 1)
+                                       }
+                                    />
+                                 </PaginationItem>
+                              </PaginationContent>
+                           </Pagination>
+                           {/* <Button type="submit" className="w-auto" disabled={loading}>
                               {loading ? (
                                  <>
                                     <Loader2 className="animate-spin" /> Enviando...
@@ -141,56 +168,7 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
                                     <Send /> Enviar
                                  </>
                               )}
-                           </Button>
-                           {/* <Pagination className="block">
-                              <PaginationContent className="justify-between">
-                                 {step > 1 && (
-                                    <>
-                                       <PaginationItem>
-                                          <PaginationPrevious
-                                             className={cn(buttonVariants({ variant: "outline" }))}
-                                             onClick={() => setStep((s) => s - 1)}
-                                          />
-                                       </PaginationItem>
-                                       <PaginationItem>
-                                          <Button type="submit" className="w-auto" disabled={loading}>
-                                             {loading ? (
-                                                <>
-                                                   <Loader2 className="animate-spin" /> Enviando...
-                                                </>
-                                             ) : (
-                                                <>
-                                                   <Send /> Enviar
-                                                </>
-                                             )}
-                                          </Button>
-                                       </PaginationItem>
-                                    </>
-                                 )}
-                                 {step < 2 && (
-                                    <>
-                                       <PaginationItem>
-                                          <Button variant="outline" disabled>
-                                             <ChevronLeft className="mr-2 h-4 w-4" />
-                                             Previous
-                                          </Button>
-                                       </PaginationItem>
-                                       <PaginationItem className="">
-                                          <PaginationNext
-                                             className={cn(buttonVariants({ variant: "outline" }))}
-                                             onClick={() =>
-                                                handleStepNext<FormSchemaType>({
-                                                   form,
-                                                   setFormData,
-                                                   setStep,
-                                                })
-                                             }
-                                          />
-                                       </PaginationItem>
-                                    </>
-                                 )}
-                              </PaginationContent>
-                           </Pagination> */}
+                           </Button> */}
                         </div>
                      </form>
                   </Form>
