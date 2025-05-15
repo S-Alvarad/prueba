@@ -7,14 +7,16 @@ import { Loader2, Send, UserRound, ChevronLeft } from "lucide-react"
 import { useUserForm } from '@/hooks/useForm'
 
 // 2. Utils o helpers
-import { cn } from "@/lib/utils"
+import { cn, handleStepNext } from "@/lib/utils"
 
 // 3. Componentes UI (shadcn/ui)
 import { Form } from "@/components/ui/form"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } 
+from "@/components/ui/pagination"
+import { toast } from "sonner"
 
 // 4. Componentes propios (más específicos)
 import { Loader } from '@/components/loader'
@@ -29,63 +31,70 @@ import { FormSchemaType } from '@/schemas/formSchema'
 
 
 export function Formulario({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-   const [step, setStep] = useState(1);
-   const [loading, setLoading] = useState(false);
+   const [step, setStep] = useState(1);            // paginado
+   const [loading, setLoading] = useState(false);  // loading
+   // const [formData, setFormData] = useState({});   // Objeto para el POST
+   // const [formData, setFormData] = useState<FormSchemaType>({} as FormSchemaType);   // Objeto para el POST
 
    // 1. Define your form.
    const form = useUserForm();
 
    // 2. Define a submit handler.
    async function onSubmit(values: FormSchemaType) {
-      console.log(values)
+      console.log(values);
+      // const finalData: FormSchemaType = {
+      //    ...formData,
+      //    ...values,
+      // };
+      // console.log(finalData);
       // setLoading(true);
 
-      // try {
-      //    const response = await fetch("http://192.168.120.97:4000/api/persona", {
-      //       method: "POST",
-      //       headers: {
-      //          "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify(values),
-      //    });
+      try {
+         const response = await fetch("http://192.168.120.97:4000/api/persona", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+         });
 
-      //    const data = await response.json();
+         const data = await response.json();
 
-      //    if (!response.ok) {
-      //       toast.info("Error en la solicitud!", {
-      //          description: data.message || "Ocurrió un error inesperado.",
-      //          duration: 5000,
-      //       });
-      //       setLoading(false); // ❗️ Ocultamos loader en caso de error
-      //       return; // Salimos para NO continuar abajo
-      //    }
+         if (!response.ok) {
+            toast.info("Error en la solicitud!", {
+               description: data.message || "Ocurrió un error inesperado.",
+               duration: 5000,
+            });
+            setLoading(false); // ❗️ Ocultamos loader en caso de error
+            return; // Salimos para NO continuar abajo
+         }
 
-      //    // ✅ Esperar 3 segundos antes de ocultar loader
-      //    setTimeout(() => {
-      //       setLoading(false);
+         // ✅ Esperar 3 segundos antes de ocultar loader
+         setTimeout(() => {
+            setLoading(false);
 
-      //       console.log("Respuesta del servidor:", data);
-      //       toast.success("Todos los datos guardados correctamente!", {
-      //          duration: 5000,
-      //       });
+            console.log("Respuesta del servidor:", data);
+            toast.success("Todos los datos guardados correctamente!", {
+               duration: 5000,
+            });
 
-      //       // ✅ Aquí formateamos (reseteamos) el formulario:
-      //       form.reset();
-      //    }, 3000); // 3000 milisegundos = 3 segundos
+            // ✅ Aquí formateamos (reseteamos) el formulario:
+            form.reset();
+         }, 3000); // 3000 milisegundos = 3 segundos
 
-      // } catch (error: any) {
-      //    console.error("Error al enviar datos:", error);
-      //    toast.error("Error al guardar los datos!", {
-      //       description: error?.message || "Ocurrió un error inesperado.",
-      //       duration: 5000,
-      //    });
-      //    setLoading(false); // ❗️ También ocultamos loader si entra en catch
-      // }
+      } catch (error: any) {
+         console.error("Error al enviar datos:", error);
+         toast.error("Error al guardar los datos!", {
+            description: error?.message || "Ocurrió un error inesperado.",
+            duration: 5000,
+         });
+         setLoading(false); // ❗️ También ocultamos loader si entra en catch
+      }
    }
 
-   useEffect(() => {
-      console.log(form.formState.errors);
-   }, [form.formState.errors]);
+   // useEffect(() => {
+   //    console.log(form.formState.errors);
+   // }, [form.formState.errors]);
 
    return (
       <>
@@ -169,7 +178,13 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
                                        <PaginationItem className="">
                                           <PaginationNext
                                              className={cn(buttonVariants({ variant: "outline" }))}
-                                             onClick={() => setStep((s) => s + 1)}
+                                             onClick={() =>
+                                                handleStepNext<FormSchemaType>({
+                                                   form,
+                                                   setFormData,
+                                                   setStep,
+                                                })
+                                             }
                                           />
                                        </PaginationItem>
                                     </>

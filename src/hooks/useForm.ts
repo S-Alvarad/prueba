@@ -17,7 +17,7 @@ export function useUserForm() {
          fecha_nacimiento: new Date('1999-02-07'),
 
          pais_nacimiento: "colombia",
-         departamento_nacimiento: "valle del cauca",
+         departamento_nacimiento: "",
          ciudad_nacimiento: "cali",
 
          direccion_residencia: {
@@ -41,6 +41,7 @@ export function useUserForm() {
          celular: "3192976668",
          telefono: "",
          tiene_hijos: false,
+         // numero_hijos: "", // ¡Esto es clave!
       },
       shouldUnregister: true,
    });

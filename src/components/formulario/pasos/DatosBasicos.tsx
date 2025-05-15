@@ -81,8 +81,6 @@ function DatosBasicos({ form }: FormInputProps) {
                   <p role="alert">La fecha de nacimiento es obligatoria</p>
                )}
             </div>
-
-
             {/* <FormInput<FormSchemaType>
                form={form}
                name="fecha_nacimiento"
