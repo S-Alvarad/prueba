@@ -7,20 +7,19 @@ import { Input } from "@/components/ui/input"
 
 import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
-// import { FormDatePicker } from '@/components/FormDatePicker'
 
-import { FormSchemaType } from '@/schemas/formSchema'
+import { PersonaSchemaType } from '@/schemas/personaSchema'
 import { enum_tipo_documento } from '@/constants/enums'
 
 interface FormInputProps {
-   form: UseFormReturn<FormSchemaType>
+   form: UseFormReturn<PersonaSchemaType>
 }
 
 export function DatosBasicos({ form }: FormInputProps) {
    return (
       <>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <FormSelect<FormSchemaType>
+            <FormSelect<PersonaSchemaType>
                form={form}
                name="tipo_documento"
                label="Tipo de documento"
@@ -28,14 +27,14 @@ export function DatosBasicos({ form }: FormInputProps) {
                placeholder="Seleccione un documento"
                description="Campo obligatorio."
             />
-            <FormInput<FormSchemaType>
+            <FormInput<PersonaSchemaType>
                form={form}
                name="num_documento"
                label="Número de documento"
                placeholder="Ingresa tu número de documento"
                description="Campo obligatorio."
             />
-            <FormInput<FormSchemaType>
+            <FormInput<PersonaSchemaType>
                form={form}
                name="primer_nombre"
                label="Primer nombre"
@@ -47,7 +46,7 @@ export function DatosBasicos({ form }: FormInputProps) {
                <Input id="segundo_nombre" placeholder="Ingresa tu primer nombre" {...form.register("segundo_nombre")} />
                <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
             </div>
-            <FormInput<FormSchemaType>
+            <FormInput<PersonaSchemaType>
                form={form}
                name="primer_apellido"
                label="Primer apellido"

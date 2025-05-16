@@ -1,5 +1,18 @@
-import { Formulario } from "@/components/formulario/Formulario"
 import { ModeToggle } from "@/components/mode-toggle";
+
+import { PersonaForm } from '@/components/forms/persona/PersonaForm'
+
+import {
+   Pagination,
+   PaginationContent,
+   PaginationEllipsis,
+   PaginationItem,
+   PaginationLink,
+   PaginationNext,
+   PaginationPrevious,
+} from "@/components/ui/pagination"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+
 
 export default function LoginPage() {
    return (
@@ -8,7 +21,27 @@ export default function LoginPage() {
             <ModeToggle />
          </div>
          <div className="flex w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl flex-col gap-6 mx-auto p-2">
-            <Formulario />
+            <PersonaForm />
+            <Card>
+               <CardContent>
+                  <Pagination>
+                     <PaginationContent>
+                        <PaginationItem>
+                           <PaginationPrevious href="#" />
+                        </PaginationItem>
+                        <PaginationItem>
+                           <PaginationLink href="#">1</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                           <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                           <PaginationNext href="#" />
+                        </PaginationItem>
+                     </PaginationContent>
+                  </Pagination>
+               </CardContent>
+            </Card>
          </div>
       </div>
    )

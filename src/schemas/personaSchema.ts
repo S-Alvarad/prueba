@@ -76,7 +76,7 @@ const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
    })
 ])
 
-export const FormSchema = z.object({
+export const PersonaSchema = z.object({
    tipo_documento: z.enum(
       enum_tipo_documento.map(option => option.value) as [string, ...string[]], {
       message: "Seleccione un tipo de documento."
@@ -104,6 +104,4 @@ export const FormSchema = z.object({
    .and(DatosSecundariosSchema)
    .and(tieneHijosSchema);
 
-
-
-export type FormSchemaType = z.infer<typeof FormSchema>;
+export type PersonaSchemaType = z.infer<typeof PersonaSchema>;

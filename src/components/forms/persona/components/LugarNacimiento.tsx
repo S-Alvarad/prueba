@@ -1,13 +1,13 @@
 "use client"
 
 import { UseFormReturn } from "react-hook-form"
-import { FormSchemaType } from '@/schemas/formSchema'
+import { PersonaSchemaType } from '@/schemas/personaSchema'
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 
 interface FormInputProps {
-   form: UseFormReturn<FormSchemaType>
+   form: UseFormReturn<PersonaSchemaType>
 }
 
 export function LugarNacimiento({ form }: FormInputProps) {

@@ -1,14 +1,22 @@
 import { z } from "zod"
-import { enum_tipo_documento, enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
+import { enum_tipo_documento } from '@/constants/enums'
 
-const LugarNacimientoSchema = z.object({
-   pais_nacimiento: z.string({
-      required_error: "El campo es obligatorio."
-   }).transform(val => val.toUpperCase()).optional(),
-   departamento_nacimiento: z.string().transform(val => val.toUpperCase()).optional(),
-   ciudad_nacimiento: z.string({
-      required_error: "El campo es obligatorio."
-   }).transform(val => val.toUpperCase()).optional(),
+const EmpresaSchema = z.object({
+   nombre_empresa: z.string().min(1, {
+      message: "Campo obligatorio.",
+   }).transform(val => val.toUpperCase()),
+   direccion_empresa: z.string().min(1, {
+      message: "Campo obligatorio.",
+   }).transform(val => val.toUpperCase()),
+   tipo_de_empresa: z.string().min(1, {
+      message: "Campo obligatorio.",
+   }).transform(val => val.toUpperCase()),
+   telefono_empresa: z.string().min(1, {
+      message: "Campo obligatorio.",
+   }).transform(val => val.toUpperCase()),
+   ciudad_empresa: z.string().min(1, {
+      message: "Campo obligatorio.",
+   }).transform(val => val.toUpperCase()),
 });
 const DireccionResidenciaSchema = z.object({
    barrio: z.string({
@@ -32,47 +40,22 @@ const DireccionResidenciaSchema = z.object({
       message: "La direccion es obligatoria."
    }).transform(val => val.toUpperCase()),
 })
-const DireccionCorrespondenciaSchema = z.object({
-   barrio: z.string().transform(val => val.toUpperCase()),
-   departamento: z.string().transform(val => val.toUpperCase()),
-   ciudad: z.string().transform(val => val.toUpperCase()),
-   direccion: z.string().transform(val => val.toUpperCase()),
-})
-const DatosSecundariosSchema = z.object({
-   sexo: z.enum(
-      enum_sexo.map(option => option.value) as [string, ...string[]], {
-      message: "Seleccione un sexo."
-   }),
-   tipo_sangre: z.enum(
-      enum_tipo_rh.map(option => option.value) as [string, ...string[]], {
-      message: "Seleccione tipo de RH."
-   }),
-   estado_civil: z.enum(
-      enum_estado_civil.map(option => option.value) as [string, ...string[]], {
-      message: "Seleccione un estado civil."
-   }),
-   personas_a_cargo: z.coerce.number().optional(),
-   celular: z.string()
-      .min(1, { message: "Este campo es obligatorio" })
-      .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
-      .regex(/^\d+$/, { message: "Debe contener solo números" }),
-   telefono: z.string()
-      .regex(/^\d+$/, { message: "Debe contener solo números" })
-      .min(7, { message: "Debe tener al menos 7 dígitos" })
-      .max(10, { message: "Debe tener máximo 10 dígitos" })
-      .or(z.literal(""))
-      .optional(),
+const LugarNacimientoSchema = z.object({
+   pais_nacimiento: z.string({
+      required_error: "El campo es obligatorio."
+   }).transform(val => val.toUpperCase()).optional(),
+   departamento_nacimiento: z.string().transform(val => val.toUpperCase()).optional(),
+   ciudad_nacimiento: z.string({
+      required_error: "El campo es obligatorio."
+   }).transform(val => val.toUpperCase()).optional(),
 });
-const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
+const tieneTrabajo = z.discriminatedUnion("tiene_trabajo", [
    z.object({
-      tiene_hijos: z.literal(true),
-      numero_hijos: z.coerce.number({
-         invalid_type_error: "Este campo es obligatorio.",
-         message: "Este campo es obligatorio."
-      }),
+      tiene_trabajo: z.literal(true),
+      empresa: EmpresaSchema,
    }),
    z.object({
-      tiene_hijos: z.literal(false),
+      tiene_trabajo: z.literal(false),
    })
 ])
 
@@ -98,12 +81,18 @@ export const FormSchema = z.object({
       required_error: "Este campo es obligatorio."
    }),
    direccion_residencia: DireccionResidenciaSchema,
-   direccion_correspondencia: DireccionCorrespondenciaSchema,
+   telefono: z.string()
+      .regex(/^\d+$/, { message: "Debe contener solo números" })
+      .min(7, { message: "Debe tener al menos 7 dígitos" })
+      .max(10, { message: "Debe tener máximo 10 dígitos" })
+      .or(z.literal(""))
+      .optional(),
+   celular: z.string()
+      .min(1, { message: "Este campo es obligatorio" })
+      .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
+      .regex(/^\d+$/, { message: "Debe contener solo números" }),
 })
    .and(LugarNacimientoSchema)
-   .and(DatosSecundariosSchema)
-   .and(tieneHijosSchema);
-
-
+   .and(tieneTrabajo)
 
 export type FormSchemaType = z.infer<typeof FormSchema>;

@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FormSchema, FormSchemaType } from '@/schemas/formSchema'
+import { PersonaSchema, PersonaSchemaType } from '@/schemas/personaSchema'
 
 // 1. Define your form hook.
-export function useUserForm() {
-   return useForm<FormSchemaType>({
+// export function usePersonaForm(defaultValues? : PersonaSchemaType) {
+export function usePersonaForm() {
+   return useForm<PersonaSchemaType>({
       mode: "onBlur",
-      resolver: zodResolver(FormSchema),
+      resolver: zodResolver(PersonaSchema),
       defaultValues: {
          tipo_documento: "CC",
          num_documento: "1143994968",
@@ -14,27 +15,22 @@ export function useUserForm() {
          segundo_nombre: "",
          primer_apellido: "alvarado",
          segundo_apellido: "paez",
-         // fecha_nacimiento: undefined,
          fecha_nacimiento: new Date(),
-
          pais_nacimiento: "colombia",
          departamento_nacimiento: "",
          ciudad_nacimiento: "cali",
-
          direccion_residencia: {
             direccion: "Cra. 8 #10-47",
             barrio: "La Merced",
             ciudad: "Cali",
             departamento: "Valle del Cauca",
          },
-
          direccion_correspondencia: {
             direccion: "",
             barrio: "",
             ciudad: "",
             departamento: "",
          },
-
          sexo: "M",
          tipo_sangre: "O+",
          personas_a_cargo: 2,

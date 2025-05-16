@@ -11,7 +11,7 @@ import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
 import { FormDatePicker } from '@/components/FormDatePicker'
 
-import { FormSchemaType } from '@/schemas/formSchema'
+import { FormSchemaType } from '@/schemas/personaSchema'
 import { enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
 
 interface FormInputProps {

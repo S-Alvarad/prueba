@@ -3,7 +3,7 @@
 import { UseFormReturn } from "react-hook-form"
 import { FormSchemaType } from '@/schemas/conyugeSchema'
 
-import { DatosBasicos } from '@/components/formulario/persona/DatosBasicos'
+import { DatosBasicos } from '@/components/formulario/persona/components/DatosBasicos'
 
 interface FormInputProps {
    form: UseFormReturn<FormSchemaType>
