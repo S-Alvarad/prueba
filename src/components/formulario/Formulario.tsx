@@ -1,42 +1,31 @@
 "use client"
 
 import { useState, useEffect, lazy } from "react";
-
 // 1. Librerías de terceros
-import { Loader2, Send, UserRound, ChevronLeft, Terminal } from "lucide-react"
+import { Loader2, Send, UserRound, ChevronLeft, Info } from "lucide-react"
 import { useUserForm } from '@/hooks/useForm'
-
 // 2. Utils o helpers
 import { cn, handleStepNext } from "@/lib/utils"
-
 // 3. Componentes UI (shadcn/ui)
-import { Form } from "@/components/ui/form"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious }
-   from "@/components/ui/pagination"
 import { toast } from "sonner"
+import { Form } from "@/components/ui/form"
+import { Separator } from "@/components/ui/separator"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 // 4. Componentes propios (más específicos)
 import { Loader } from '@/components/loader'
-
-const DatosBasicos = lazy(() => import('@/components/formulario/pasos/DatosBasicos'))
-const LugarNacimiento = lazy(() => import('@/components/formulario/pasos/LugarNacimiento'))
-const DatosSecundarios = lazy(() => import('@/components/formulario/pasos/DatosSecundarios'))
-const Direcciones = lazy(() => import('@/components/formulario/pasos/DireccionResidencia'))
-
-// 5. Tipos y esquemas
+// 5. Lazy load
+const Persona = lazy(() => import('@/components/formulario/persona/Persona'))
+const Conyuge = lazy(() => import('@/components/formulario/conyuge/conyuge'))
+// 6. Tipos y esquemas
 import { FormSchemaType } from '@/schemas/formSchema'
 
-
 export function Formulario({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-   const [loading, setLoading] = useState(false);  // loading
-   const [step, setStep] = useState(1);            // paso actual
-   const [formData, setFormData] = useState({});   // datos acumulados
-   // const [formData, setFormData] = useState<FormSchemaType>({} as FormSchemaType);   // datos acumulados
+   const [loading, setLoading] = useState(false);
+   const [step, setStep] = useState(2);
+   const [formData, setFormData] = useState<FormSchemaType>({} as FormSchemaType);
 
    // 1. Define your form.
    const form = useUserForm();
@@ -44,15 +33,10 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
    // 2. Define a submit handler.
    async function onSubmit(values: FormSchemaType) {
       console.log(values);
-      // const finalData: FormSchemaType = {
-      //    ...formData,
-      //    ...values,
-      // };
-      // console.log(finalData);
 
       setLoading(true);
       try {
-         const response = await fetch("http://192.168.120.97:4000/api/persona", {
+         const response = await fetch("http://localhost:4000/api/persona", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -71,18 +55,16 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
             return; // Salimos para NO continuar abajo
          }
 
-         // ✅ Esperar 3 segundos antes de ocultar loader
+         // ✅ Esperar 2 segundos antes de ocultar loader
          setTimeout(() => {
             setLoading(false);
-
             console.log("Respuesta del servidor:", data);
             toast.success("Todos los datos guardados correctamente!", {
                duration: 5000,
             });
-
             // ✅ Aquí formateamos (reseteamos) el formulario:
             form.reset();
-         }, 2000); // 3000 milisegundos = 3 segundos
+         }, 2000); // 2000 milisegundos = 2 segundos
 
       } catch (error: any) {
          console.error("Error al enviar datos:", error);
@@ -100,7 +82,6 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
 
    return (
       <>
-         {/* Loader: solo se muestra si loading es true */}
          {loading && <Loader />}
          <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card className="gap-0 p-0">
@@ -119,26 +100,22 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
                         <div className="grid gap-6">
                            {step === 1 && (
                               <>
-                                 <DatosBasicos form={form} />
-                                 <LugarNacimiento form={form} />
-                                 <DatosSecundarios form={form} />
-                                 <Direcciones form={form} tipo="residencia" />
-                                 <Direcciones form={form} tipo="correspondencia" />
+                                 <Persona form={form} />
                               </>
                            )}
                            {step === 2 && (
                               <>
-                                 <Alert>
-                                    <Terminal className="h-4 w-4" />
-                                    <AlertTitle>Heads up!</AlertTitle>
+                                 <Alert variant={"emerald"}>
+                                    <Info className="h-4 w-4" />
+                                    <AlertTitle>La siguiente información <strong>NO</strong> es obligatoria!</AlertTitle>
                                     <AlertDescription>
-                                       You can add components to your app using the cli.
+                                       Puede omitir su diligenciamiento.
                                     </AlertDescription>
                                  </Alert>
+                                 <Conyuge form={form} />
                               </>
                            )}
                            <Separator />
-
                            <Pagination className="block">
                               <PaginationContent className="justify-between">
                                  <PaginationItem>
@@ -147,12 +124,15 @@ export function Formulario({ className, ...props }: React.ComponentPropsWithoutR
                                        onClick={() => setStep((prev) => prev - 1)}
                                     />
                                  </PaginationItem>
-                                 <PaginationItem className="">
+                                 <PaginationItem>
                                     <PaginationNext
                                        className={cn(buttonVariants({ variant: "outline" }))}
-                                       onClick={
-                                          form.handleSubmit(onSubmit)
-                                          // () => setStep((prev) => prev + 1)
+                                       onClick={() =>
+                                          handleStepNext({
+                                             form,
+                                             setFormData,
+                                             setStep,
+                                          })
                                        }
                                     />
                                  </PaginationItem>

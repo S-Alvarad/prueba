@@ -16,7 +16,7 @@ interface FormInputProps {
    form: UseFormReturn<FormSchemaType>
 }
 
-function DatosBasicos({ form }: FormInputProps) {
+export function DatosBasicos({ form }: FormInputProps) {
    return (
       <>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -81,5 +81,3 @@ function DatosBasicos({ form }: FormInputProps) {
       </>
    )
 }
-// aria-invalid
-export default DatosBasicos

@@ -13,7 +13,7 @@ interface FormInputProps {
    tipo: 'residencia' | 'correspondencia'
 }
 
-function Direcciones({ form, tipo }: FormInputProps) {
+export function Direcciones({ form, tipo }: FormInputProps) {
    return (
       <>
          <blockquote className="border-l-4 italic pl-6 dark:border-l-emerald-400 border-l-emerald-600">
@@ -53,5 +53,3 @@ function Direcciones({ form, tipo }: FormInputProps) {
       </>
    )
 }
-
-export default Direcciones

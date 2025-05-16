@@ -10,7 +10,7 @@ interface FormInputProps {
    form: UseFormReturn<FormSchemaType>
 }
 
-function LugarNacimiento({ form }: FormInputProps) {
+export function LugarNacimiento({ form }: FormInputProps) {
    return (
       <>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -54,5 +54,3 @@ function LugarNacimiento({ form }: FormInputProps) {
       </>
    )
 }
-
-export default LugarNacimiento

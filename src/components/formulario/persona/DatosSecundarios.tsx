@@ -18,7 +18,7 @@ interface FormInputProps {
    form: UseFormReturn<FormSchemaType>
 }
 
-function DatosSecundarios({ form }: FormInputProps) {
+export function DatosSecundarios({ form }: FormInputProps) {
 
    const tineHijos = useWatch({ control: form.control, name: "tiene_hijos" });
 
@@ -112,5 +112,3 @@ function DatosSecundarios({ form }: FormInputProps) {
       </>
    )
 }
-
-export default DatosSecundarios
