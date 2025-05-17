@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
+import { submitForm } from '@/lib/submitForm'
 
 import { UserRound, Loader2, Send } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { toast } from "sonner"
 
 // Hook
 import { usePersonaForm } from '@/hooks/usePersonaForm'
@@ -21,73 +23,133 @@ import { LugarNacimiento } from '@/components/forms/persona/components/LugarNaci
 import { DatosSecundarios } from '@/components/forms/persona/components/DatosSecundarios'
 import { Direcciones } from '@/components/forms/persona/components/Direcciones'
 
+import { Loader } from '@/components/loader'
+
 type PersonaFormProps = React.ComponentPropsWithoutRef<"div"> & {
    onSubmitDone: () => void;
+   resetFormStep: () => void;
+   isLastStep?: boolean;           // ← añade esta prop
 };
 
-export function PersonaForm({ className, onSubmitDone, ...props }: PersonaFormProps) {
+export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep, ...props }: PersonaFormProps) {
    const [loading, setLoading] = useState(false);
 
    // 1. Define tu formulario.
    const form = usePersonaForm();
 
    // 2. Define un controlador de envío.
-   async function onSubmit(values: PersonaSchemaType) {
-      setLoading(true);
-      try {
-         console.log(values);
+   // async function onSubmit(values: PersonaSchemaType) {
+   //    setLoading(true);
+   //    try {
+   //       const response = await fetch("http://localhost:4000/api/persona", {
+   //          method: "POST",
+   //          headers: {
+   //             "Content-Type": "application/json",
+   //          },
+   //          body: JSON.stringify(values),
+   //       });
 
-         // Aquí va la lógica real de envío
-         // await fetch("/api/personas", { method: "POST", body: JSON.stringify(values) });
+   //       const data = await response.json();
 
-         onSubmitDone(); // Avanza si todo salió bien
-      } catch (error) {
-         console.error("Error al enviar el formulario", error);
-      } finally {
-         setLoading(false);
-      }
-   }
+   //       if (!response.ok) {
+   //          toast.info("Error en la solicitud!", {
+   //             description: data.message || "Ocurrió un error inesperado.",
+   //             duration: 5000,
+   //          });
+   //          setLoading(false); // ❗️ Ocultamos loader en caso de error
+   //          return; // Salimos para NO continuar abajo
+   //       }
+
+   //       // Dentro del submit
+   //       setTimeout(() => {
+   //          setLoading(false);
+   //          console.log("Respuesta del servidor:", data);
+   //          form.reset();
+
+   //          toast.success("Datos guardados correctamente!", {
+   //             description: isLastStep
+   //                ? "Hoja de vida finalizada"
+   //                : "Continuemos!",
+   //             duration: 2000, // puedes acortar la duración
+   //          });
+
+   //          // Espera a que el toast se vea, luego cambia el step
+   //          setTimeout(() => {
+   //             // onSubmitDone(); // Avanza al siguiente paso
+   //             if (isLastStep) {
+   //                resetFormStep();                     // vuelve a step 1
+   //             } else {
+   //                onSubmitDone();                      // pasa al step siguiente
+   //             }
+   //          }, 2000); // misma duración que el toast
+   //       }, 2000); // Espera inicial opcional
+
+   //    } catch (error: any) {
+   //       console.error("Error al enviar datos:", error);
+   //       toast.error("Error al guardar los datos!", {
+   //          description: error?.message || "Ocurrió un error inesperado.",
+   //          duration: 5000,
+   //       });
+   //       setLoading(false); // ❗️ También ocultamos loader si entra en catch
+   //    }
+   // }
+
+   const onSubmit = (values: PersonaSchemaType) => {
+      // Funcion onSubmit reutilizable
+      submitForm<PersonaSchemaType>({
+         endpoint: "persona",
+         values,
+         form,
+         isLastStep: false,
+         onSubmitDone,
+         resetFormStep,
+         setLoading
+      });
+   };
 
    return (
-      <div className={cn("flex flex-col gap-6", className)} {...props}>
-         <Card className="gap-0 p-0">
-            <CardHeader className="text-start flex items-center space-x-3 border-b-[1px] p-6">
-               <UserRound className="w-[40px] h-[40px] p-2 border rounded-full bg-muted" />
-               <div>
-                  <CardTitle className="text-2xl font-bold">Información personal</CardTitle>
-                  <CardDescription className="italic text-md text-muted-foreground">
-                     Datos básicos
-                  </CardDescription>
-               </div>
-            </CardHeader>
-            <CardContent className="p-6">
-               <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                     <div className="grid gap-6">
-                        {/* Secciones */}
-                        <DatosBasicos form={form} />
-                        <LugarNacimiento form={form} />
-                        <DatosSecundarios form={form} />
-                        <Direcciones form={form} tipo="residencia" />
-                        <Direcciones form={form} tipo="correspondencia" />
-                        <Separator />
-                        <Button type="submit" className="w-auto" disabled={loading}>
-                           {loading ? (
-                              <>
-                                 <Loader2 className="animate-spin" /> Enviando...
-                              </>
-                           ) : (
-                              <>
-                                 <Send /> Enviar
-                              </>
-                           )}
-                        </Button>
-                     </div>
-                  </form>
-               </Form>
-            </CardContent>
-         </Card>
-      </div >
+      <>
+         {loading && <Loader />}
+         <div className={cn("flex flex-col gap-6", className)} {...props}>
+            <Card className="gap-0 p-0">
+               <CardHeader className="text-start flex items-center space-x-3 border-b-[1px] p-6">
+                  <UserRound className="w-[40px] h-[40px] p-2 border rounded-full bg-muted" />
+                  <div>
+                     <CardTitle className="text-2xl font-bold">Información personal</CardTitle>
+                     <CardDescription className="italic text-md text-muted-foreground">
+                        Datos básicos
+                     </CardDescription>
+                  </div>
+               </CardHeader>
+               <CardContent className="p-6">
+                  <Form {...form}>
+                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <div className="grid gap-6">
+                           {/* Secciones */}
+                           <DatosBasicos form={form} />
+                           <LugarNacimiento form={form} />
+                           <DatosSecundarios form={form} />
+                           <Direcciones form={form} tipo="residencia" />
+                           <Direcciones form={form} tipo="correspondencia" />
+                           <Separator />
+                           <Button type="submit" className="w-auto" disabled={loading}>
+                              {loading ? (
+                                 <>
+                                    <Loader2 className="animate-spin" /> Enviando...
+                                 </>
+                              ) : (
+                                 <>
+                                    <Send /> Enviar
+                                 </>
+                              )}
+                           </Button>
+                        </div>
+                     </form>
+                  </Form>
+               </CardContent>
+            </Card>
+         </div >
+      </>
    )
 }
 

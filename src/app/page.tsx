@@ -1,33 +1,32 @@
 "use client"
 
 import React, { Suspense, useState, useEffect, useRef } from 'react'
-import { cn, handleStepNext } from '@/lib/utils'
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { LoaderSkeleton } from "@/components/loader-skeleton"
-import {
-   Pagination,
-   PaginationContent,
-   PaginationEllipsis,
-   PaginationItem,
-   PaginationLink,
-   PaginationNext,
-   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Card, CardContent } from "@/components/ui/card"
-import { buttonVariants } from '@/components/ui/button'
 
 const PersonaForm = React.lazy(() => import('@/components/forms/persona/PersonaForm'))
 const ConyugeForm = React.lazy(() => import('@/components/forms/conyuge/ConyugeForm'))
 
-export default function LoginPage() {
+export default function FomPage() {
    const [step, setStep] = useState(1);
    const [delayPassed, setDelayPassed] = useState(false);
 
-   const personaFormRef = useRef<(() => void) | null>(null);
-   const conyugeFormRef = useRef<(() => void) | null>(null);
+   // Leer el step desde localStorage al montar (solo en cliente)
+   useEffect(() => {
+      if (typeof window !== "undefined") {
+         const savedStep = localStorage.getItem("formStep")
+         if (savedStep) {
+            setStep(parseInt(savedStep, 10))
+         }
+      }
+   }, [])
 
    useEffect(() => {
+      // Guardar step cada vez que cambie
+      if (typeof window !== "undefined") {
+         localStorage.setItem("formStep", step.toString())
+      }
       setDelayPassed(false);
       const timeout = setTimeout(() => {
          setDelayPassed(true);
@@ -36,17 +35,13 @@ export default function LoginPage() {
       return () => clearTimeout(timeout);
    }, [step]);
 
-   const handleNext = () => {
-      if (step === 1 && personaFormRef.current) {
-         personaFormRef.current();
-      } else if (step === 2 && conyugeFormRef.current) {
-         conyugeFormRef.current();
+   // Resetear el formulario completamente
+   const resetFormStep = () => {
+      if (typeof window !== "undefined") {
+         localStorage.setItem("formStep", "1")
       }
-   };
-
-   const handlePrevious = () => {
-      setStep((prev) => Math.max(1, prev - 1));
-   };
+      setStep(1)
+   }
 
    return (
       <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted md:p-10">
@@ -61,37 +56,22 @@ export default function LoginPage() {
                   <Suspense fallback={<LoaderSkeleton />}>
                      {step === 1 && (
                         <PersonaForm
-                           onSubmitDone={() => setStep(2)}
-                           setSubmitRef={(fn) => (personaFormRef.current = fn)}
+                           onSubmitDone={() => setStep(2)}  // Avanzar al siguiente paso
+                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           // isLastStep={true}
                         />
                      )}
                      {step === 2 && (
+                        //  <ConyugeForm
+                        //    onSubmitDone={() => setStep(3)}
+                        //    resetFormStep={resetFormStep}
+                        //    isLastStep={true}
+                        // />
                         <ConyugeForm />
                      )}
                   </Suspense>
                )}
             </Suspense>
-            <Card>
-               <CardContent>
-                  <Pagination className="block">
-                     <PaginationContent className="justify-between">
-                        <PaginationItem>
-                           <PaginationPrevious
-                              className={cn(buttonVariants({ variant: "outline" }))}
-                              onClick={handlePrevious}
-                              aria-disabled
-                           />
-                        </PaginationItem>
-                        <PaginationItem>
-                           <PaginationNext
-                              className={cn(buttonVariants({ variant: "outline" }))}
-                              onClick={handleNext}
-                           />
-                        </PaginationItem>
-                     </PaginationContent>
-                  </Pagination>
-               </CardContent>
-            </Card>
          </div>
       </div>
    )
