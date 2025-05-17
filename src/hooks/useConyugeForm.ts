@@ -3,14 +3,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ConyugeSchema, ConyugeSchemaType } from '@/schemas/conyugeSchema'
 
 // 1. Define your form hook.
-export function useUserForm() {
+export function useConyugeForm() {
    return useForm<ConyugeSchemaType>({
       mode: "onBlur",
       resolver: zodResolver(ConyugeSchema),
       defaultValues: {
          tipo_documento: "CC",
          num_documento: "1143994968",
-         primer_nombre: "steven",
+         primer_nombre: "juan",
          segundo_nombre: "",
          primer_apellido: "alvarado",
          segundo_apellido: "paez",

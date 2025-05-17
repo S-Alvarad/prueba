@@ -1,10 +1,12 @@
+
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { UseFormReturn, FieldValues } from "react-hook-form";
 
 export function cn(...inputs: ClassValue[]) {
    return twMerge(clsx(inputs))
 }
+
+import { UseFormReturn, FieldValues } from "react-hook-form";
 
 type HandleStepNextProps<T extends FieldValues> = {
    form: UseFormReturn<T>;

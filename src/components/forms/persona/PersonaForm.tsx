@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
 
@@ -15,13 +15,17 @@ import { usePersonaForm } from '@/hooks/usePersonaForm'
 // Schema ( z.infer<typeof Schema> )
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 
-// Importa aquí las secciones del formulario de persona.
+// Importa aquí las secciones del formulario.
 import { DatosBasicos } from '@/components/forms/persona/components/DatosBasicos'
 import { LugarNacimiento } from '@/components/forms/persona/components/LugarNacimiento'
 import { DatosSecundarios } from '@/components/forms/persona/components/DatosSecundarios'
 import { Direcciones } from '@/components/forms/persona/components/Direcciones'
 
-export function PersonaForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+type PersonaFormProps = React.ComponentPropsWithoutRef<"div"> & {
+   onSubmitDone: () => void;
+};
+
+export function PersonaForm({ className, onSubmitDone, ...props }: PersonaFormProps) {
    const [loading, setLoading] = useState(false);
 
    // 1. Define tu formulario.
@@ -29,7 +33,19 @@ export function PersonaForm({ className, ...props }: React.ComponentPropsWithout
 
    // 2. Define un controlador de envío.
    async function onSubmit(values: PersonaSchemaType) {
-      console.log(values);
+      setLoading(true);
+      try {
+         console.log(values);
+
+         // Aquí va la lógica real de envío
+         // await fetch("/api/personas", { method: "POST", body: JSON.stringify(values) });
+
+         onSubmitDone(); // Avanza si todo salió bien
+      } catch (error) {
+         console.error("Error al enviar el formulario", error);
+      } finally {
+         setLoading(false);
+      }
    }
 
    return (
@@ -74,3 +90,5 @@ export function PersonaForm({ className, ...props }: React.ComponentPropsWithout
       </div >
    )
 }
+
+export default PersonaForm;
