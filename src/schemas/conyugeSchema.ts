@@ -59,7 +59,7 @@ const tieneTrabajo = z.discriminatedUnion("tiene_trabajo", [
    })
 ])
 
-export const FormSchema = z.object({
+export const ConyugeSchema = z.object({
    tipo_documento: z.enum(
       enum_tipo_documento.map(option => option.value) as [string, ...string[]], {
       message: "Seleccione un tipo de documento."
@@ -81,18 +81,18 @@ export const FormSchema = z.object({
       required_error: "Este campo es obligatorio."
    }),
    direccion_residencia: DireccionResidenciaSchema,
+   celular: z.string()
+      .min(1, { message: "Este campo es obligatorio" })
+      .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
+      .regex(/^\d+$/, { message: "Debe contener solo números" }),
    telefono: z.string()
       .regex(/^\d+$/, { message: "Debe contener solo números" })
       .min(7, { message: "Debe tener al menos 7 dígitos" })
       .max(10, { message: "Debe tener máximo 10 dígitos" })
       .or(z.literal(""))
       .optional(),
-   celular: z.string()
-      .min(1, { message: "Este campo es obligatorio" })
-      .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
-      .regex(/^\d+$/, { message: "Debe contener solo números" }),
 })
    .and(LugarNacimientoSchema)
    .and(tieneTrabajo)
 
-export type FormSchemaType = z.infer<typeof FormSchema>;
+export type ConyugeSchemaType = z.infer<typeof ConyugeSchema>;

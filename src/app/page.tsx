@@ -1,7 +1,4 @@
 import { ModeToggle } from "@/components/mode-toggle";
-
-import { PersonaForm } from '@/components/forms/persona/PersonaForm'
-
 import {
    Pagination,
    PaginationContent,
@@ -11,8 +8,10 @@ import {
    PaginationNext,
    PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 
+import { PersonaForm } from '@/components/forms/persona/PersonaForm'
+import { ConyugeForm } from '@/components/forms/conyuge/ConyugeForm'
 
 export default function LoginPage() {
    return (
@@ -21,7 +20,8 @@ export default function LoginPage() {
             <ModeToggle />
          </div>
          <div className="flex w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl flex-col gap-6 mx-auto p-2">
-            <PersonaForm />
+            <PersonaForm className="hidden"/>
+            <ConyugeForm />
             <Card>
                <CardContent>
                   <Pagination>

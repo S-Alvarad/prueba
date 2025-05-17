@@ -4,9 +4,10 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils"
 
-import { UserRound, Loader2, Send } from "lucide-react"
+import { UserRound, Loader2, Send, CheckCircle } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { Button, buttonVariants } from "@/components/ui/button"
 
@@ -16,12 +17,9 @@ import { usePersonaForm } from '@/hooks/usePersonaForm'
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 
 // Importa aquí las secciones del formulario de persona.
-import { DatosBasicos } from '@/components/forms/persona/components/DatosBasicos'
-import { LugarNacimiento } from '@/components/forms/persona/components/LugarNacimiento'
-import { DatosSecundarios } from '@/components/forms/persona/components/DatosSecundarios'
-import { Direcciones } from '@/components/forms/persona/components/Direcciones'
 
-export function PersonaForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+
+export function ConyugeForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
    const [loading, setLoading] = useState(false);
 
    // 1. Define tu formulario.
@@ -49,11 +47,14 @@ export function PersonaForm({ className, ...props }: React.ComponentPropsWithout
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                      <div className="grid gap-6">
                         {/* Secciones */}
-                        <DatosBasicos form={form} />
-                        <LugarNacimiento form={form} />
-                        <DatosSecundarios form={form} />
-                        <Direcciones form={form} tipo="residencia" />
-                        <Direcciones form={form} tipo="correspondencia" />
+                        <Alert variant="emerald">
+                           <CheckCircle className="h-4 w-4" />
+                           <AlertTitle>Los siguientes campos no son obligatorios</AlertTitle>
+                           <AlertDescription className="italic">
+                              Puedes omitir esta informacion.
+                           </AlertDescription>
+                        </Alert>
+
                         <Separator />
                         <Button type="submit" className="w-auto" disabled={loading}>
                            {loading ? (
