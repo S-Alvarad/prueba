@@ -62,7 +62,7 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
          endpoint: "conyuge",
          values: payload,  // <-- usa payload en vez de solo values
          form,
-         isLastStep: false,
+         isLastStep: isLastStep ?? false, // ✅ usa false si es undefined
          onSubmitDone,
          resetFormStep,
          setLoading

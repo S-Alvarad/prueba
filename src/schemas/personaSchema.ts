@@ -51,7 +51,10 @@ const DatosSecundariosSchema = z.object({
       enum_estado_civil.map(option => option.value) as [string, ...string[]], {
       message: "Seleccione un estado civil."
    }),
-   personas_a_cargo: z.coerce.number().optional(),
+   personas_a_cargo: z.string().optional()
+      .refine((val) => val === undefined || val === "" || (!isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 10), {
+         message: "Debe ser un número entre 0 y 10",
+      }),
    celular: z.string()
       .min(1, { message: "Este campo es obligatorio" })
       .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos

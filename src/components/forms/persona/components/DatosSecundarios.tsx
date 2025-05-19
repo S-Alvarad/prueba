@@ -5,7 +5,7 @@ import { UseFormReturn, useWatch } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
 
 import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
@@ -54,6 +54,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                form={form}
                name="celular"
                label="No° Celular"
+               type="number"
                placeholder="Ingresa No° celular"
                description="Campo obligatorio."
             />
@@ -61,18 +62,27 @@ export function DatosSecundarios({ form }: FormInputProps) {
                <Label htmlFor="telefono_fijo">Telefono fijo</Label>
                <Input
                   id="telefono_fijo"
+                  type="number"
                   placeholder="Ingresa telefono fijo"
                   {...form.register("telefono")}
                />
                <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
             </div>
-            <FormInput<PersonaSchemaType>
-               form={form}
+            <FormField
+               control={form.control}
                name="personas_a_cargo"
-               type="number"
-               label="No° Personas a su cargo"
-               placeholder="Ingresa No° personas a cargo"
-               description="No° personas que depende financieramente de usted."
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>No° Personas a su cargo</FormLabel>
+                     <FormControl>
+                        <Input type="number" placeholder="No° personas que depende financieramente de usted." {...field} />
+                     </FormControl>
+                     <FormDescription className="text-sm italic text-muted-foreground">
+                        Este campo no es obligatorio.
+                     </FormDescription>
+                     <FormMessage />
+                  </FormItem>
+               )}
             />
          </div>
          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -105,7 +115,17 @@ export function DatosSecundarios({ form }: FormInputProps) {
                      <FormItem>
                         <FormLabel>Número de hijos</FormLabel>
                         <FormControl>
-                           <Input type="number" {...field} placeholder="Ingresa No° numero de hijos" />
+                           <Input
+                              type="number"
+                              {...field}
+                              value={field.value ?? ""}
+                              placeholder="Ingresa No° numero de hijos"
+                           // onChange={(e) => {
+                           //    // para que no haya NaN o valores inválidos
+                           //    const val = e.target.value;
+                           //    field.onChange(val === "" ? undefined : Number(val));
+                           // }}
+                           />
                         </FormControl>
                         {/* <FormMessage /> */}
                         <p className="text-sm italic dark:text-emerald-400 text-emerald-600">

@@ -6,7 +6,7 @@ import { UseFormReturn } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 import { ConyugeSchemaType } from '@/schemas/conyugeSchema'
 import { enum_tipo_documento } from '@/constants/enums'
@@ -27,7 +27,7 @@ export function DatosBasicos({ form }: FormInputProps) {
          : (
             <SelectItem value="No hay opciones disponibles" disabled />
          );
-   }, [enum_tipo_documento]); // ✅ Solo recalcula si cambia el array
+   }, []); // ✅ Solo recalcula si cambia el array
 
    return (
       <>

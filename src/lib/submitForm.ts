@@ -5,7 +5,7 @@ type SubmitFormOptions<T extends FieldValues> = {
    endpoint: string;
    values: T;
    form: UseFormReturn<T>;
-   isLastStep: boolean;
+   isLastStep?: boolean;
    onSubmitDone: () => void;
    resetFormStep: () => void;
    setLoading: (loading: boolean) => void;
@@ -24,7 +24,9 @@ export async function submitForm<T extends FieldValues>({
    console.log(values);
 
    try {
-      const response = await fetch(`http://localhost:4000/api/${endpoint}`, {
+      // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+      const response = await fetch(`http://192.168.120.79:4000/api/${endpoint}`, {
          method: "POST",
          headers: {
             "Content-Type": "application/json",
@@ -61,10 +63,11 @@ export async function submitForm<T extends FieldValues>({
             }
          }, 2000);
       }, 2000);
-   } catch (error: any) {
+   } catch (error: unknown) {
       console.error("Error al enviar datos:", error);
+      const errorMessage = error instanceof Error ? error.message : "Ocurrió un error inesperado.";
       toast.error("Error al guardar los datos!", {
-         description: error?.message || "Ocurrió un error inesperado.",
+         description: errorMessage,
          duration: 5000,
       });
       setLoading(false);

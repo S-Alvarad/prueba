@@ -3,7 +3,7 @@
 import { FieldPath, UseFormReturn, FieldValues } from "react-hook-form"
 
 import { Input } from '@/components/ui/input'
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 interface FormInputProps<T extends FieldValues> extends Omit<React.ComponentProps<typeof Input>, 'form'> {
    form: UseFormReturn<T>

@@ -8,10 +8,12 @@ const PersonaForm = React.lazy(() => import('@/components/forms/persona/PersonaF
 const ConyugeForm = React.lazy(() => import('@/components/forms/conyuge/ConyugeForm'))
 const HistoriaClinicaForm = React.lazy(() => import('@/components/forms/historia-clinica/HistoriaClinicaForm'))
 
+import { usePersistentCedula } from '@/hooks/utils/usePersistentCedula'
+
 export default function FomPage() {
    const [step, setStep] = useState(1);
    const [delayPassed, setDelayPassed] = useState(false);
-   const [cedula, setCedula] = useState<string | null>(null);
+   const [cedula, setCedula] = usePersistentCedula();
 
    // Leer el step desde localStorage al montar (solo en cliente)
    useEffect(() => {
@@ -39,9 +41,10 @@ export default function FomPage() {
    // Resetear el formulario completamente
    const resetFormStep = () => {
       if (typeof window !== "undefined") {
-         localStorage.setItem("formStep", "1")
+         localStorage.setItem("formStep", "1");
       }
-      setStep(1)
+      setStep(1);
+      setCedula(null); // Esto borra de localStorage también
    }
 
    return (

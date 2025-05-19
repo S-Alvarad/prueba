@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
-import { submitForm } from '@/lib/submitForm'
 
 import { UserRound, Loader2, Send } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { toast } from "sonner";
 
 // Hook
@@ -106,13 +105,16 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
    //    }
    // }
 
-   async function onSubmit (values: PersonaSchemaType) {
+   async function onSubmit(values: PersonaSchemaType) {
       setCedula(values.num_documento); // ⬅️ Aquí compartes el dato al componente padre app/page.tsx
-      
+
       setLoading(true);
 
       try {
-         const response = await fetch(`http://localhost:4000/api/persona`, {
+         // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+         // const response = await fetch(`${API_BASE_URL}/api/persona`, {
+         const response = await fetch(`http://192.168.120.79:4000/api/persona`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -149,10 +151,11 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
                }
             }, 2000);
          }, 2000);
-      } catch (error: any) {
+      } catch (error: unknown) {
          console.error("Error al enviar datos:", error);
+         const errorMessage = error instanceof Error ? error.message : "Ocurrió un error inesperado.";
          toast.error("Error al guardar los datos!", {
-            description: error?.message || "Ocurrió un error inesperado.",
+            description: errorMessage,
             duration: 5000,
          });
          setLoading(false);

@@ -3,9 +3,8 @@
 import { UseFormReturn } from "react-hook-form"
 import { ConyugeSchemaType } from '@/schemas/conyugeSchema'
 
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 interface FormInputProps {
    form: UseFormReturn<ConyugeSchemaType>
