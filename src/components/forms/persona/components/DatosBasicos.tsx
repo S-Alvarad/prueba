@@ -4,6 +4,7 @@ import { UseFormReturn } from "react-hook-form"
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 
 import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
@@ -27,12 +28,21 @@ export function DatosBasicos({ form }: FormInputProps) {
                placeholder="Seleccione un documento"
                description="Campo obligatorio."
             />
-            <FormInput<PersonaSchemaType>
-               form={form}
+            <FormField
+               control={form.control}
                name="num_documento"
-               label="Número de documento"
-               placeholder="Ingresa tu número de documento"
-               description="Campo obligatorio."
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Número de documento</FormLabel>
+                     <FormControl>
+                        <Input type="number" {...field} placeholder="Ingresa tu número de documento" />
+                     </FormControl>
+                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                        Campo obligatorio.
+                     </FormDescription>
+                     {/* <FormMessage /> */}
+                  </FormItem>
+               )}
             />
             <FormInput<PersonaSchemaType>
                form={form}

@@ -69,6 +69,8 @@ const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
       numero_hijos: z.coerce.number({
          invalid_type_error: "Este campo es obligatorio.",
          message: "Este campo es obligatorio."
+      }).refine(val => !isNaN(val) && val > 0, {
+         message: "Este campo es obligatorio y mayor a 0.",
       }),
    }),
    z.object({

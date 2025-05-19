@@ -21,6 +21,8 @@ export async function submitForm<T extends FieldValues>({
    setLoading,
 }: SubmitFormOptions<T>) {
    setLoading(true);
+   console.log(values);
+
    try {
       const response = await fetch(`http://localhost:4000/api/${endpoint}`, {
          method: "POST",
@@ -31,9 +33,10 @@ export async function submitForm<T extends FieldValues>({
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (!response.ok) {
-         toast.info("Error en la solicitud!", {
+         toast.error("Error en la solicitud!", {
             description: data.message || "Ocurrió un error inesperado.",
             duration: 5000,
          });
@@ -43,7 +46,6 @@ export async function submitForm<T extends FieldValues>({
 
       setTimeout(() => {
          setLoading(false);
-         console.log("Respuesta del servidor:", data);
          form.reset();
 
          toast.success("Datos guardados correctamente!", {

@@ -1,6 +1,6 @@
 "use client"
 
-import { FieldPath, UseFormReturn, FieldValues, useWatch } from "react-hook-form"
+import { UseFormReturn, useWatch } from "react-hook-form"
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -9,13 +9,12 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 
 import { FormInput } from '@/components/FormInput'
 import { FormSelect } from '@/components/FormSelect'
-import { FormDatePicker } from '@/components/FormDatePicker'
 
-import { FormSchemaType } from '@/schemas/personaSchema'
+import { PersonaSchemaType } from '@/schemas/personaSchema'
 import { enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
 
 interface FormInputProps {
-   form: UseFormReturn<FormSchemaType>
+   form: UseFormReturn<PersonaSchemaType>
 }
 
 export function DatosSecundarios({ form }: FormInputProps) {
@@ -25,7 +24,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
    return (
       <>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormSelect<FormSchemaType>
+            <FormSelect<PersonaSchemaType>
                form={form}
                name="sexo"
                label="Sexo"
@@ -33,7 +32,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                placeholder="Sexo"
                description="Campo obligatorio."
             />
-            <FormSelect<FormSchemaType>
+            <FormSelect<PersonaSchemaType>
                form={form}
                name="tipo_sangre"
                label="Tipo de sangre"
@@ -41,7 +40,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                placeholder="Tipo de sangre"
                description="Campo obligatorio."
             />
-            <FormSelect<FormSchemaType>
+            <FormSelect<PersonaSchemaType>
                form={form}
                name="estado_civil"
                label="Estado civil"
@@ -51,7 +50,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
             />
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput<FormSchemaType>
+            <FormInput<PersonaSchemaType>
                form={form}
                name="celular"
                label="No° Celular"
@@ -67,7 +66,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                />
                <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
             </div>
-            <FormInput<FormSchemaType>
+            <FormInput<PersonaSchemaType>
                form={form}
                name="personas_a_cargo"
                type="number"
@@ -99,14 +98,22 @@ export function DatosSecundarios({ form }: FormInputProps) {
                )}
             />
             {tineHijos && (
-               <div className="grid gap-2">
-                  <Input
-                     type="number"
-                     {...form.register("numero_hijos")}
-                     placeholder="Ingresa No° numero de hijos"
-                  />
-                  <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
-               </div>
+               <FormField
+                  control={form.control}
+                  name="numero_hijos"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Número de hijos</FormLabel>
+                        <FormControl>
+                           <Input type="number" {...field} placeholder="Ingresa No° numero de hijos" />
+                        </FormControl>
+                        {/* <FormMessage /> */}
+                        <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </p>
+                     </FormItem>
+                  )}
+               />
             )}
          </div>
       </>

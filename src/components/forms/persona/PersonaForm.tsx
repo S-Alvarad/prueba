@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { toast } from "sonner"
+import { toast } from "sonner";
 
 // Hook
 import { usePersonaForm } from '@/hooks/usePersonaForm'
@@ -29,13 +29,25 @@ type PersonaFormProps = React.ComponentPropsWithoutRef<"div"> & {
    onSubmitDone: () => void;
    resetFormStep: () => void;
    isLastStep?: boolean;           // ← añade esta prop
+   setCedula: (cedula: string) => void;
 };
 
-export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep, ...props }: PersonaFormProps) {
+export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep, setCedula, ...props }: PersonaFormProps) {
    const [loading, setLoading] = useState(false);
 
    // 1. Define tu formulario.
    const form = usePersonaForm();
+
+   // 🔍 logFormErrorsEffect
+   useEffect(() => {
+      if (form.formState.errors) {
+         const errors = form.formState.errors;
+         if (Object.keys(errors).length > 0) {
+            console.log(form.formState.errors);
+            toast.error("Por favor, completa los campos obligatorios.");
+         }
+      }
+   }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
    // async function onSubmit(values: PersonaSchemaType) {
@@ -94,17 +106,57 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
    //    }
    // }
 
-   const onSubmit = (values: PersonaSchemaType) => {
-      // Funcion onSubmit reutilizable
-      submitForm<PersonaSchemaType>({
-         endpoint: "persona",
-         values,
-         form,
-         isLastStep: false,
-         onSubmitDone,
-         resetFormStep,
-         setLoading
-      });
+   async function onSubmit (values: PersonaSchemaType) {
+      setCedula(values.num_documento); // ⬅️ Aquí compartes el dato al componente padre app/page.tsx
+      
+      setLoading(true);
+
+      try {
+         const response = await fetch(`http://localhost:4000/api/persona`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+         });
+
+         const data = await response.json();
+         console.log(data);
+
+         if (!response.ok) {
+            toast.error("Error en la solicitud!", {
+               description: data.message || "Ocurrió un error inesperado.",
+               duration: 5000,
+            });
+            setLoading(false);
+            return;
+         }
+
+         setTimeout(() => {
+            setLoading(false);
+            form.reset();
+
+            toast.success("Datos guardados correctamente!", {
+               description: isLastStep ? "Hoja de vida finalizada" : "Continuemos!",
+               duration: 2000,
+            });
+
+            setTimeout(() => {
+               if (isLastStep) {
+                  resetFormStep();
+               } else {
+                  onSubmitDone();
+               }
+            }, 2000);
+         }, 2000);
+      } catch (error: any) {
+         console.error("Error al enviar datos:", error);
+         toast.error("Error al guardar los datos!", {
+            description: error?.message || "Ocurrió un error inesperado.",
+            duration: 5000,
+         });
+         setLoading(false);
+      }
    };
 
    return (

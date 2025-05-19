@@ -5,9 +5,6 @@ import { UseFormReturn } from "react-hook-form"
 import { FormInput } from '@/components/FormInput'
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-
 interface FormInputProps {
    form: UseFormReturn<PersonaSchemaType>
    tipo: 'residencia' | 'correspondencia'

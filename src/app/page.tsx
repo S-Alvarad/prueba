@@ -1,16 +1,17 @@
 "use client"
-
-import React, { Suspense, useState, useEffect, useRef } from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { LoaderSkeleton } from "@/components/loader-skeleton"
 
 const PersonaForm = React.lazy(() => import('@/components/forms/persona/PersonaForm'))
 const ConyugeForm = React.lazy(() => import('@/components/forms/conyuge/ConyugeForm'))
+const HistoriaClinicaForm = React.lazy(() => import('@/components/forms/historia-clinica/HistoriaClinicaForm'))
 
 export default function FomPage() {
    const [step, setStep] = useState(1);
    const [delayPassed, setDelayPassed] = useState(false);
+   const [cedula, setCedula] = useState<string | null>(null);
 
    // Leer el step desde localStorage al montar (solo en cliente)
    useEffect(() => {
@@ -58,16 +59,19 @@ export default function FomPage() {
                         <PersonaForm
                            onSubmitDone={() => setStep(2)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}   // Llamar cuando se termine todo
-                           // isLastStep={true}
+                           setCedula={setCedula}
                         />
                      )}
                      {step === 2 && (
-                        //  <ConyugeForm
-                        //    onSubmitDone={() => setStep(3)}
-                        //    resetFormStep={resetFormStep}
-                        //    isLastStep={true}
-                        // />
-                        <ConyugeForm />
+                        <ConyugeForm
+                           onSubmitDone={() => setStep(3)}  // Avanzar al siguiente paso
+                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           isLastStep={true}
+                           cedula={cedula}
+                        />
+                     )}
+                     {step === 3 && (
+                        <HistoriaClinicaForm />
                      )}
                   </Suspense>
                )}
