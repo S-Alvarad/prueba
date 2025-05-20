@@ -16,23 +16,23 @@ interface FormInputProps {
    form: UseFormReturn<historiaCinicaSchemaType>
 }
 
-export function Intervenciones({ form }: FormInputProps) {
-   const tieneIntervenciones = useWatch({ control: form.control, name: "tiene_intervenciones" });
+export function Enfermedades({ form }: FormInputProps) {
+   const tieneEnfermedades = useWatch({ control: form.control, name: "tiene_enfermedades" });
 
    const {
-         fields,                    // Arreglo de objetos que representan los campos actuales del array
-         append,                    // Función para añadir un nuevo elemento al array
-         remove                     // Función para eliminar un elemento del array por índice
-      } = useFieldArray({           
-         control: form.control,     // Control del formulario (de useForm)
-         name: "intervenciones",      // Nombre del campo array en el formulario
-      });
+      fields,                    // Arreglo de objetos que representan los campos actuales del array
+      append,                    // Función para añadir un nuevo elemento al array
+      remove                     // Función para eliminar un elemento del array por índice
+   } = useFieldArray({
+      control: form.control,     // Control del formulario (de useForm)
+      name: "enfermedades",      // Nombre del campo array en el formulario
+   });
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
          <FormField
             control={form.control}
-            name="tiene_intervenciones"
+            name="tiene_enfermedades"
             render={({ field }) => (
                <FormItem>
                   <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
@@ -45,43 +45,25 @@ export function Intervenciones({ form }: FormInputProps) {
                         />
                      </FormControl>
                      <div className="space-y-1 leading-none">
-                        <span>¿Ha tenido intervenciones quirúrgicas?</span>
+                        <span>¿Ha tenido o tiene enfermedades?</span>
                      </div>
                   </FormLabel>
                </FormItem>
             )}
          />
          {/* Lista dinámica */}
-         {tieneIntervenciones && fields.length > 0 && fields.map((field, index) => (
+         {tieneEnfermedades && fields.length > 0 && fields.map((field, index) => (
             <div key={field.id} className="grid gap-6">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <FormField
                      control={form.control}
-                     name={`intervenciones.${index}.tipo`}
+                     name={`enfermedades.${index}.tipo`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
                            <FormLabel hidden>Tipo</FormLabel>
                            <FormControl>
                               <Input placeholder="Tipo de intervención" {...field} value={field.value ?? ""} />
                            </FormControl>
-                           {/* <FormMessage /> */}
-                        </FormItem>
-                     )}
-                  />
-                  <FormField
-                     control={form.control}
-                     name={`intervenciones.${index}.fecha`}
-                     render={({ field }) => (
-                        <FormItem className="flex-1">
-                           <FormLabel hidden>Fecha</FormLabel>
-                           <FormControl>
-                              <Input
-                                 type="date"
-                                 value={field.value ? new Date(field.value).toISOString().split('T')[0] : ""}
-                                 onChange={e => field.onChange(new Date(e.target.value))}
-                              />
-                           </FormControl>
-                           {/* <FormMessage /> */}
                         </FormItem>
                      )}
                   />
@@ -93,15 +75,15 @@ export function Intervenciones({ form }: FormInputProps) {
          ))}
 
          {/* Botón para agregar */}
-         {tieneIntervenciones && (
+         {tieneEnfermedades && (
             <div className="flex justify-start">
                <Button
                   type="button"
-                  onClick={() => append({ tipo: "", fecha: new Date() })}
+                  onClick={() => append({ tipo: "" })}
                   className="w-auto justify-self-start flex bg-secondary-foreground hover:bg-secondary-foreground/90"
                >
                   <Plus />
-                  <span>Agregar intervención</span>
+                  <span>Agregar enfermedad</span>
                </Button>
             </div>
          )}
@@ -109,4 +91,4 @@ export function Intervenciones({ form }: FormInputProps) {
    )
 }
 
-export default Intervenciones
+export default Enfermedades

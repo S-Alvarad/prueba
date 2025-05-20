@@ -2,8 +2,15 @@
 
 import { UseFormReturn } from "react-hook-form"
 
+import { cn } from "@/lib/utils"
+import { CalendarIcon } from "lucide-react"
+import { format } from "date-fns"
+
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 import { FormInput } from '@/components/FormInput'
@@ -70,7 +77,7 @@ export function DatosBasicos({ form }: FormInputProps) {
             </div>
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="grid gap-2">
+            {/* <div className="grid gap-2">
                <Label htmlFor="fecha_nacimiento">Fecha de nacimiento</Label>
                <Input
                   type="date"
@@ -81,11 +88,59 @@ export function DatosBasicos({ form }: FormInputProps) {
                />
                <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
                   Campo obligatorio.
-               </p>
-               {/* {form.formState.errors.fecha_nacimiento?.type === "invalid_date" && (
+               </p> */}
+            {/* {form.formState.errors.fecha_nacimiento?.type === "invalid_date" && (
                   <p className="italic dark:text-red-400 text-sm text-red-600">La fecha de nacimiento es obligatoria</p>
                )} */}
-            </div>
+            {/* </div> */}
+            <FormField
+               control={form.control}
+               name="fecha_nacimiento"
+               render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                     <FormLabel>Fecha de nacimiento</FormLabel>
+                     <Popover>
+                        <PopoverTrigger asChild>
+                           <FormControl>
+                              <Button
+                                 aria-invalid={!!form.formState.errors.fecha_nacimiento}
+                                 variant={"outline"}
+                                 className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                 )}
+                              >
+                                 {field.value ? (
+                                    format(field.value, "PPP")
+                                 ) : (
+                                    <span>YYYY-MM-DD</span>
+                                 )}
+                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                           </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                           <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                 date > new Date() || date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                              captionLayout="dropdown-buttons"
+                              fromYear={1990}
+                              toYear={2025}
+                           />
+                        </PopoverContent>
+                     </Popover>
+                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                        Campo obligatorio.
+                     </FormDescription>
+                     {/* <FormMessage /> */}
+                  </FormItem>
+               )}
+            />
          </div>
       </>
    )

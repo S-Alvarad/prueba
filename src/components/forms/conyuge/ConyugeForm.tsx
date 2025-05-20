@@ -11,6 +11,7 @@ import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { toast } from "sonner";
 
 // Hook
 import { useConyugeForm } from '@/hooks/useConyugeForm'
@@ -41,15 +42,15 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
    // 🔍 logFormErrorsEffect
    useEffect(() => {
       if (form.formState.errors) {
-         console.log(form.formState.errors);
+         const errors = form.formState.errors;
+         if (Object.keys(errors).length > 0) {
+            console.log(form.formState.errors);
+            toast.error("Por favor, completa los campos obligatorios.");
+         }
       }
    }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
-   // async function onSubmit(values: ConyugeSchemaType) {
-   //    console.log(values);
-   // }
-
    const onSubmit = (values: ConyugeSchemaType) => {
       // Combina los valores del formulario con la cedula que viene del padre
       const payload = {

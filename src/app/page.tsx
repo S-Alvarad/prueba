@@ -69,12 +69,15 @@ export default function FomPage() {
                         <ConyugeForm
                            onSubmitDone={() => setStep(3)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}   // Llamar cuando se termine todo
-                           isLastStep={true}
                            cedula={cedula}
                         />
                      )}
                      {step === 3 && (
-                        <HistoriaClinicaForm />
+                        <HistoriaClinicaForm
+                           onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
+                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           cedula={cedula}
+                        />
                      )}
                   </Suspense>
                )}

@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
+import { submitForm } from '@/lib/submitForm'
 
-import { UserRound, Loader2, Send } from "lucide-react"
+import { HeartPlus, Loader2, Send, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from "sonner";
 
 // Hook
@@ -18,6 +20,8 @@ import { historiaCinicaSchemaType } from '@/schemas/historiaClinicaSchema'
 
 // Importa aquí las secciones del formulario.
 import { Intervenciones } from '@/components/forms/historia-clinica/components/Intervenciones'
+import { Enfermedades } from '@/components/forms/historia-clinica/components/Enfermedades'
+import { Medicamentos } from '@/components/forms/historia-clinica/components/Medicamentos'
 
 import { Loader } from '@/components/loader'
 
@@ -25,10 +29,10 @@ type HistoriaClinicaFormProps = React.ComponentPropsWithoutRef<"div"> & {
    onSubmitDone: () => void;
    resetFormStep: () => void;
    isLastStep?: boolean;           // ← añade esta prop
-   setCedula: (cedula: string) => void;
+   cedula: string | null;
 };
 
-export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, isLastStep, setCedula, ...props }: HistoriaClinicaFormProps) {
+export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, isLastStep, cedula, ...props }: HistoriaClinicaFormProps) {
    const [loading, setLoading] = useState(false);
 
    // 1. Define tu formulario.
@@ -47,8 +51,23 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
 
    // 2. Define un controlador de envío.
    async function onSubmit(values: historiaCinicaSchemaType) {
-      console.log(values);
-      setLoading(true);
+      // Combina los valores del formulario con la cedula que viene del padre
+      const payload = {
+         ...values,
+         num_documento_persona: cedula, // agregamos la cedula al payload
+      };
+      console.log(payload);
+
+      // // Funcion onSubmit reutilizable
+      // submitForm<historiaCinicaSchemaType>({
+      //    endpoint: "historia_clinica",
+      //    values: payload,  // <-- usa payload en vez de solo values
+      //    form,
+      //    isLastStep: isLastStep ?? false, // ✅ usa false si es undefined
+      //    onSubmitDone,
+      //    resetFormStep,
+      //    setLoading
+      // });
    };
 
    return (
@@ -57,11 +76,11 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
          <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card className="gap-0 p-0">
                <CardHeader className="text-start flex items-center space-x-3 border-b-[1px] p-6">
-                  <UserRound className="w-[40px] h-[40px] p-2 border rounded-full bg-muted" />
+                  <HeartPlus className="w-[40px] h-[40px] p-2 border rounded-full bg-muted" />
                   <div>
-                     <CardTitle className="text-2xl font-bold">Información personal</CardTitle>
+                     <CardTitle className="text-2xl font-bold">Historia clinica</CardTitle>
                      <CardDescription className="italic text-md text-muted-foreground">
-                        Datos básicos
+                        Datos clinicos
                      </CardDescription>
                   </div>
                </CardHeader>
@@ -70,7 +89,16 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <div className="grid gap-6">
                            {/* Secciones */}
-                           <Intervenciones form={form}/>
+                           <Alert variant="emerald">
+                              <Info className="h-4 w-4" />
+                              <AlertTitle>La siguiente información <strong>NO</strong> es obligatoria!</AlertTitle>
+                              <AlertDescription className="italic">
+                                 Puede omitir su diligenciamiento.
+                              </AlertDescription>
+                           </Alert>
+                           <Intervenciones form={form} />
+                           <Enfermedades form={form} />
+                           <Medicamentos form={form} />
                            <Separator />
                            <Button type="submit" className="w-auto" disabled={loading}>
                               {loading ? (
