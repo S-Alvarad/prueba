@@ -61,24 +61,33 @@ export default function FomPage() {
                      {step === 1 && (
                         <PersonaForm
                            onSubmitDone={() => setStep(2)}  // Avanzar al siguiente paso
-                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           resetFormStep={resetFormStep}    // Llamar cuando se termine todo
                            setCedula={setCedula}
                         />
                      )}
                      {step === 2 && (
                         <ConyugeForm
                            onSubmitDone={() => setStep(3)}  // Avanzar al siguiente paso
-                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           resetFormStep={resetFormStep}    // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}
                      {step === 3 && (
                         <HistoriaClinicaForm
                            onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
-                           resetFormStep={resetFormStep}   // Llamar cuando se termine todo
+                           resetFormStep={resetFormStep}    // Llamar cuando se termine todo
+                           isLastStep={true}                // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}
+                     {/* VacunaCovidForm */}
+                     {/* EstiloDeVidaForm */}
+                     {/* ConocimientoForm */}
+                     {/* ExperienciaLaboralForm */}
+                     {/* SituacionGeneralForm */}
+                     {/* EducacionBasicaForm */}
+                     {/* EducacionSuperiorForm */}
+                     {/* ReferenciaFamiliarForm */}
                   </Suspense>
                )}
             </Suspense>

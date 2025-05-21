@@ -84,7 +84,7 @@ const accidentes = z.discriminatedUnion("tiene_accidentes", [
             }).transform(val => val.toUpperCase()),
             fecha: z.coerce.date({
                required_error: "Este campo es obligatorio."
-            }),
+            }).or(z.literal("")),
          })
       ),
    }),
@@ -117,13 +117,13 @@ const psicoactivos = z.discriminatedUnion("consume_psicoactivos", [
 ]);
 
 export const historiaCinicaSchema = z.object({
-   // habito_fumar: z.coerce.boolean(),
-   // habito_licor: z.coerce.boolean(),
+   habito_fumar: z.coerce.boolean(),
+   habito_licor: z.coerce.boolean(),
 })
 .and(intervenciones)
 .and(enfermedades)
 .and(medicamentos)
-// .and(accidentes)
-// .and(psicoactivos)
+.and(accidentes)
+.and(psicoactivos)
 
 export type historiaCinicaSchemaType = z.infer<typeof historiaCinicaSchema>;

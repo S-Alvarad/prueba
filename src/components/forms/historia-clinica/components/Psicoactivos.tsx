@@ -16,8 +16,8 @@ interface FormInputProps {
    form: UseFormReturn<historiaCinicaSchemaType>
 }
 
-export function Enfermedades({ form }: FormInputProps) {
-   const tieneEnfermedades = useWatch({ control: form.control, name: "tiene_enfermedades" });
+export function Psicoactivos({ form }: FormInputProps) {
+   const consumePsicoactivos = useWatch({ control: form.control, name: "consume_psicoactivos" });
 
    const {
       fields,                    // Arreglo de objetos que representan los campos actuales del array
@@ -25,14 +25,14 @@ export function Enfermedades({ form }: FormInputProps) {
       remove                     // Función para eliminar un elemento del array por índice
    } = useFieldArray({
       control: form.control,     // Control del formulario (de useForm)
-      name: "enfermedades",      // Nombre del campo array en el formulario
+      name: "psicoactivos",        // Nombre del campo array en el formulario
    });
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
          <FormField
             control={form.control}
-            name="tiene_enfermedades"
+            name="consume_psicoactivos"
             render={({ field }) => (
                <FormItem>
                   <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
@@ -45,28 +45,43 @@ export function Enfermedades({ form }: FormInputProps) {
                         />
                      </FormControl>
                      <div className="space-y-1 leading-none">
-                        <span>¿Ha tenido o tiene enfermedades?</span>
+                        <span>¿Hace uso de alguna sustancia psicoactiva?</span>
                      </div>
                   </FormLabel>
                </FormItem>
             )}
          />
          {/* Lista dinámica */}
-         {tieneEnfermedades && fields.length > 0 && fields.map((field, index) => (
+         {consumePsicoactivos && fields.length > 0 && fields.map((field, index) => (
             <div key={field.id} className="grid gap-6">
-               <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                      control={form.control}
-                     name={`enfermedades.${index}.tipo`}
+                     name={`psicoactivos.${index}.tipo`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
-                           <FormLabel hidden>Tipo</FormLabel>
                            <FormControl>
-                              <Input placeholder="Tipo de enfermedad" {...field} value={field.value ?? ""} />
+                              <Input placeholder="Tipo de psicoactivo" {...field} value={field.value ?? ""} />
                            </FormControl>
                            {index === 0 && (
-                              <FormDescription className="text-sm italic text-muted-foreground">
-                                 Especifique la enfermedad o condición diagnosticada. Ej: Hipertensión, Diabetes, Asma, Gastritis.
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Alcohol, Marihuana, Tabaco, Cocaína...
+                              </FormDescription>
+                           )}
+                        </FormItem>
+                     )}
+                  />
+                  <FormField
+                     control={form.control}
+                     name={`psicoactivos.${index}.frecuencia`}
+                     render={({ field }) => (
+                        <FormItem className="flex-1">
+                           <FormControl>
+                              <Input placeholder="Frecuencia de consumo" {...field} value={field.value ?? ""} />
+                           </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Diario, Semanal, Solo en eventos sociales, etc.
                               </FormDescription>
                            )}
                         </FormItem>
@@ -80,11 +95,11 @@ export function Enfermedades({ form }: FormInputProps) {
          ))}
 
          {/* Botón para agregar */}
-         {tieneEnfermedades && (
+         {consumePsicoactivos && (
             <div className="flex justify-start">
                <Button
                   type="button"
-                  onClick={() => append({ tipo: "" })}
+                  onClick={() => append({ tipo: "", frecuencia: "" })}
                   className="w-auto justify-self-start flex bg-secondary-foreground hover:bg-secondary-foreground/90"
                >
                   <Plus />
@@ -96,4 +111,4 @@ export function Enfermedades({ form }: FormInputProps) {
    )
 }
 
-export default Enfermedades
+export default Psicoactivos

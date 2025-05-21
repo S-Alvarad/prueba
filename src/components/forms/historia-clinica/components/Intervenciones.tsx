@@ -10,7 +10,7 @@ import { historiaCinicaSchemaType } from '@/schemas/historiaClinicaSchema'
 import { Input } from "@/components/ui/input"
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 interface FormInputProps {
    form: UseFormReturn<historiaCinicaSchemaType>
@@ -20,13 +20,13 @@ export function Intervenciones({ form }: FormInputProps) {
    const tieneIntervenciones = useWatch({ control: form.control, name: "tiene_intervenciones" });
 
    const {
-         fields,                    // Arreglo de objetos que representan los campos actuales del array
-         append,                    // Función para añadir un nuevo elemento al array
-         remove                     // Función para eliminar un elemento del array por índice
-      } = useFieldArray({           
-         control: form.control,     // Control del formulario (de useForm)
-         name: "intervenciones",      // Nombre del campo array en el formulario
-      });
+      fields,                    // Arreglo de objetos que representan los campos actuales del array
+      append,                    // Función para añadir un nuevo elemento al array
+      remove                     // Función para eliminar un elemento del array por índice
+   } = useFieldArray({
+      control: form.control,     // Control del formulario (de useForm)
+      name: "intervenciones",      // Nombre del campo array en el formulario
+   });
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -64,6 +64,11 @@ export function Intervenciones({ form }: FormInputProps) {
                            <FormControl>
                               <Input placeholder="Tipo de intervención" {...field} value={field.value ?? ""} />
                            </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Especifique el tipo de intervención. Ej: Diagnóstica, Terapéutica, Preventiva, Reconstructiva.
+                              </FormDescription>
+                           )}
                            {/* <FormMessage /> */}
                         </FormItem>
                      )}
@@ -77,10 +82,14 @@ export function Intervenciones({ form }: FormInputProps) {
                            <FormControl>
                               <Input
                                  type="date"
-                                 value={field.value ? new Date(field.value).toISOString().split('T')[0] : ""}
                                  onChange={e => field.onChange(new Date(e.target.value))}
                               />
                            </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 No es necesaria la fecha exacta, puede ser una aproximada.
+                              </FormDescription>
+                           )}
                            {/* <FormMessage /> */}
                         </FormItem>
                      )}

@@ -7,9 +7,10 @@ import { submitForm } from '@/lib/submitForm'
 
 import { HeartPlus, Loader2, Send, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from "sonner";
 
@@ -22,6 +23,8 @@ import { historiaCinicaSchemaType } from '@/schemas/historiaClinicaSchema'
 import { Intervenciones } from '@/components/forms/historia-clinica/components/Intervenciones'
 import { Enfermedades } from '@/components/forms/historia-clinica/components/Enfermedades'
 import { Medicamentos } from '@/components/forms/historia-clinica/components/Medicamentos'
+import { Accidentes } from '@/components/forms/historia-clinica/components/Accidentes'
+import { Psicoactivos } from '@/components/forms/historia-clinica/components/Psicoactivos'
 
 import { Loader } from '@/components/loader'
 
@@ -39,15 +42,15 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
    const form = useHistoriaClinicaForm();
 
    // 🔍 logFormErrorsEffect
-   useEffect(() => {
-      if (form.formState.errors) {
-         const errors = form.formState.errors;
-         if (Object.keys(errors).length > 0) {
-            console.log(form.formState.errors);
-            toast.error("Por favor, completa los campos obligatorios.");
-         }
-      }
-   }, [form.formState.errors]);
+   // useEffect(() => {
+   //    if (form.formState.errors) {
+   //       const errors = form.formState.errors;
+   //       if (Object.keys(errors).length > 0) {
+   //          console.log("validador:", form.formState.errors);
+   //          toast.error("Por favor, completa los campos obligatorios.");
+   //       }
+   //    }
+   // }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
    async function onSubmit(values: historiaCinicaSchemaType) {
@@ -58,16 +61,16 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
       };
       console.log(payload);
 
-      // // Funcion onSubmit reutilizable
-      // submitForm<historiaCinicaSchemaType>({
-      //    endpoint: "historia_clinica",
-      //    values: payload,  // <-- usa payload en vez de solo values
-      //    form,
-      //    isLastStep: isLastStep ?? false, // ✅ usa false si es undefined
-      //    onSubmitDone,
-      //    resetFormStep,
-      //    setLoading
-      // });
+      // Funcion onSubmit reutilizable
+      submitForm<historiaCinicaSchemaType>({
+         endpoint: "historia_clinica",
+         values: payload,  // <-- usa payload en vez de solo values
+         form,
+         isLastStep: isLastStep ?? false, // ✅ usa false si es undefined
+         onSubmitDone,
+         resetFormStep,
+         setLoading
+      });
    };
 
    return (
@@ -96,9 +99,54 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
                                  Puede omitir su diligenciamiento.
                               </AlertDescription>
                            </Alert>
+                           <FormField
+                              control={form.control}
+                              name="habito_fumar"
+                              render={({ field }) => (
+                                 <FormItem>
+                                    <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow border-primary/50">
+                                       <FormControl className="scale-130">
+                                          <Checkbox
+                                             checked={field.value}
+                                             onCheckedChange={field.onChange}
+                                             className="dark:data-[state=checked]:bg-emerald-400 dark:data-[state=checked]:border-emerald-400
+                                                         data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                                          />
+                                       </FormControl>
+                                       <div className="space-y-1 leading-none">
+                                          <span>¿Tiene el hábito de fumar actualmente?</span>
+                                       </div>
+                                    </FormLabel>
+                                 </FormItem>
+                              )}
+                           />
+                           <FormField
+                              control={form.control}
+                              name="habito_licor"
+                              render={({ field }) => (
+                                 <FormItem>
+                                    <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow border-primary/50">
+                                       <FormControl className="scale-130">
+                                          <Checkbox
+                                             checked={field.value}
+                                             onCheckedChange={field.onChange}
+                                             className="dark:data-[state=checked]:bg-emerald-400 dark:data-[state=checked]:border-emerald-400
+                                                         data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                                          />
+                                       </FormControl>
+                                       <div className="space-y-1 leading-none">
+                                          <span>¿Consume bebidas alcohólicas de forma habitual?</span>
+                                       </div>
+                                    </FormLabel>
+                                 </FormItem>
+                              )}
+                           />
+                           <Separator className="bg-primary" />
                            <Intervenciones form={form} />
                            <Enfermedades form={form} />
                            <Medicamentos form={form} />
+                           <Accidentes form={form} />
+                           <Psicoactivos form={form} />
                            <Separator />
                            <Button type="submit" className="w-auto" disabled={loading}>
                               {loading ? (

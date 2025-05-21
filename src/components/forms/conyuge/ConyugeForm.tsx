@@ -40,15 +40,15 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
    const form = useConyugeForm();
 
    // 🔍 logFormErrorsEffect
-   useEffect(() => {
-      if (form.formState.errors) {
-         const errors = form.formState.errors;
-         if (Object.keys(errors).length > 0) {
-            console.log(form.formState.errors);
-            toast.error("Por favor, completa los campos obligatorios.");
-         }
-      }
-   }, [form.formState.errors]);
+   // useEffect(() => {
+   //    if (form.formState.errors) {
+   //       const errors = form.formState.errors;
+   //       if (Object.keys(errors).length > 0) {
+   //          console.log("validador:", form.formState.errors);
+   //          toast.error("Por favor, completa los campos obligatorios.");
+   //       }
+   //    }
+   // }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
    const onSubmit = (values: ConyugeSchemaType) => {

@@ -16,8 +16,8 @@ interface FormInputProps {
    form: UseFormReturn<historiaCinicaSchemaType>
 }
 
-export function Enfermedades({ form }: FormInputProps) {
-   const tieneEnfermedades = useWatch({ control: form.control, name: "tiene_enfermedades" });
+export function Accidentes({ form }: FormInputProps) {
+   const tieneAccidentes = useWatch({ control: form.control, name: "tiene_accidentes" });
 
    const {
       fields,                    // Arreglo de objetos que representan los campos actuales del array
@@ -25,14 +25,14 @@ export function Enfermedades({ form }: FormInputProps) {
       remove                     // Función para eliminar un elemento del array por índice
    } = useFieldArray({
       control: form.control,     // Control del formulario (de useForm)
-      name: "enfermedades",      // Nombre del campo array en el formulario
+      name: "accidentes",        // Nombre del campo array en el formulario
    });
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
          <FormField
             control={form.control}
-            name="tiene_enfermedades"
+            name="tiene_accidentes"
             render={({ field }) => (
                <FormItem>
                   <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
@@ -45,30 +45,65 @@ export function Enfermedades({ form }: FormInputProps) {
                         />
                      </FormControl>
                      <div className="space-y-1 leading-none">
-                        <span>¿Ha tenido o tiene enfermedades?</span>
+                        <span>¿Ha sufrido algun accidente anteriormente?</span>
                      </div>
                   </FormLabel>
                </FormItem>
             )}
          />
          {/* Lista dinámica */}
-         {tieneEnfermedades && fields.length > 0 && fields.map((field, index) => (
+         {tieneAccidentes && fields.length > 0 && fields.map((field, index) => (
             <div key={field.id} className="grid gap-6">
-               <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <FormField
                      control={form.control}
-                     name={`enfermedades.${index}.tipo`}
+                     name={`accidentes.${index}.tipo`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
-                           <FormLabel hidden>Tipo</FormLabel>
                            <FormControl>
-                              <Input placeholder="Tipo de enfermedad" {...field} value={field.value ?? ""} />
+                              <Input placeholder="Tipo de accidente" {...field} value={field.value ?? ""} />
                            </FormControl>
                            {index === 0 && (
-                              <FormDescription className="text-sm italic text-muted-foreground">
-                                 Especifique la enfermedad o condición diagnosticada. Ej: Hipertensión, Diabetes, Asma, Gastritis.
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Caída, Quemadura, Fractura...
                               </FormDescription>
                            )}
+                        </FormItem>
+                     )}
+                  />
+                  <FormField
+                     control={form.control}
+                     name={`accidentes.${index}.gravedad`}
+                     render={({ field }) => (
+                        <FormItem className="flex-1">
+                           <FormControl>
+                              <Input placeholder="Gravedad del accidente" {...field} value={field.value ?? ""} />
+                           </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Leve, Moderada, Grave.
+                              </FormDescription>
+                           )}
+                        </FormItem>
+                     )}
+                  />
+                  <FormField
+                     control={form.control}
+                     name={`accidentes.${index}.fecha`}
+                     render={({ field }) => (
+                        <FormItem className="flex-1">
+                           <FormControl>
+                              <Input
+                                 type="date"
+                                 onChange={e => field.onChange(new Date(e.target.value))}
+                              />
+                           </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 No es necesaria la fecha exacta, puede ser una aproximada.
+                              </FormDescription>
+                           )}
+                           {/* <FormMessage /> */}
                         </FormItem>
                      )}
                   />
@@ -80,11 +115,11 @@ export function Enfermedades({ form }: FormInputProps) {
          ))}
 
          {/* Botón para agregar */}
-         {tieneEnfermedades && (
+         {tieneAccidentes && (
             <div className="flex justify-start">
                <Button
                   type="button"
-                  onClick={() => append({ tipo: "" })}
+                  onClick={() => append({ tipo: "", gravedad: "", fecha: new Date() })}
                   className="w-auto justify-self-start flex bg-secondary-foreground hover:bg-secondary-foreground/90"
                >
                   <Plus />
@@ -96,4 +131,4 @@ export function Enfermedades({ form }: FormInputProps) {
    )
 }
 
-export default Enfermedades
+export default Accidentes

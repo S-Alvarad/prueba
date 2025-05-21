@@ -10,7 +10,7 @@ import { historiaCinicaSchemaType } from '@/schemas/historiaClinicaSchema'
 import { Input } from "@/components/ui/input"
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 interface FormInputProps {
    form: UseFormReturn<historiaCinicaSchemaType>
@@ -60,10 +60,14 @@ export function Medicamentos({ form }: FormInputProps) {
                      name={`medicamentos.${index}.nombre_medicamento`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
-                           <FormLabel hidden>Tipo</FormLabel>
                            <FormControl>
-                              <Input placeholder="Tipo de intervención" {...field} value={field.value ?? ""} />
+                              <Input placeholder="Nombre del medicamento" {...field} value={field.value ?? ""} />
                            </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Acetaminofén
+                              </FormDescription>
+                           )}
                         </FormItem>
                      )}
                   />
@@ -72,14 +76,14 @@ export function Medicamentos({ form }: FormInputProps) {
                      name={`medicamentos.${index}.dosis`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
-                           <FormLabel hidden>Fecha</FormLabel>
                            <FormControl>
-                              <Input
-                                 type="date"
-                                 value={field.value ? new Date(field.value).toISOString().split('T')[0] : ""}
-                                 onChange={e => field.onChange(new Date(e.target.value))}
-                              />
+                              <Input placeholder="Dosis del medicamento" {...field} value={field.value ?? ""} />
                            </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: 1 tableta 500mg
+                              </FormDescription>
+                           )}
                         </FormItem>
                      )}
                   />
@@ -88,14 +92,14 @@ export function Medicamentos({ form }: FormInputProps) {
                      name={`medicamentos.${index}.frecuencia`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
-                           <FormLabel hidden>Fecha</FormLabel>
                            <FormControl>
-                              <Input
-                                 type="date"
-                                 value={field.value ? new Date(field.value).toISOString().split('T')[0] : ""}
-                                 onChange={e => field.onChange(new Date(e.target.value))}
-                              />
+                              <Input placeholder="Frecuencia de toma" {...field} value={field.value ?? ""} />
                            </FormControl>
+                           {index === 0 && (
+                              <FormDescription className='text-sm italic text-muted-foreground'>
+                                 Ej: Cada 8 horas
+                              </FormDescription>
+                           )}
                         </FormItem>
                      )}
                   />
