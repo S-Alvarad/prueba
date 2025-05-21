@@ -84,7 +84,7 @@ const accidentes = z.discriminatedUnion("tiene_accidentes", [
             }).transform(val => val.toUpperCase()),
             fecha: z.coerce.date({
                required_error: "Este campo es obligatorio."
-            }).or(z.literal("")),
+            }),
          })
       ),
    }),

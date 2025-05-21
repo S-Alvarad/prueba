@@ -1,23 +1,26 @@
 "use client"
 
-import React from 'react'
+import { useMemo } from "react";
 
 import { Plus } from 'lucide-react';
 
 import { UseFormReturn, useWatch, useFieldArray } from "react-hook-form"
-import { historiaCinicaSchemaType } from '@/schemas/historiaClinicaSchema'
+import { vacunasCovidSchemaType } from '@/schemas/vacunaCovidSchema'
 
 import { Input } from "@/components/ui/input"
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
+import { enum_vacunas_covid } from '@/constants/enums'
+
 interface FormInputProps {
-   form: UseFormReturn<historiaCinicaSchemaType>
+   form: UseFormReturn<vacunasCovidSchemaType>
 }
 
-export function Accidentes({ form }: FormInputProps) {
-   const tieneAccidentes = useWatch({ control: form.control, name: "tiene_accidentes" });
+export function Vacunas({ form }: FormInputProps) {
+   const tieneVacunas = useWatch({ control: form.control, name: "tiene_vacunas" });
 
    const {
       fields,                    // Arreglo de objetos que representan los campos actuales del array
@@ -25,14 +28,26 @@ export function Accidentes({ form }: FormInputProps) {
       remove                     // Función para eliminar un elemento del array por índice
    } = useFieldArray({
       control: form.control,     // Control del formulario (de useForm)
-      name: "accidentes",        // Nombre del campo array en el formulario
+      name: "vacunas",      // Nombre del campo array en el formulario
    });
+
+   const selectOptions = useMemo(() => {
+      return enum_vacunas_covid.length > 0
+         ? enum_vacunas_covid.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+               {option.label}
+            </SelectItem>
+         ))
+         : (
+            <SelectItem value="No hay opciones disponibles" disabled />
+         );
+   }, []); // ✅ Solo recalcula si cambia el array
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
          <FormField
             control={form.control}
-            name="tiene_accidentes"
+            name="tiene_vacunas"
             render={({ field }) => (
                <FormItem>
                   <FormLabel className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
@@ -45,51 +60,60 @@ export function Accidentes({ form }: FormInputProps) {
                         />
                      </FormControl>
                      <div className="space-y-1 leading-none">
-                        <span>¿Ha sufrido algun accidente anteriormente?</span>
+                        <span>¿Está vacunado contra el COVID-19?</span>
                      </div>
                   </FormLabel>
                </FormItem>
             )}
          />
          {/* Lista dinámica */}
-         {tieneAccidentes && fields.length > 0 && fields.map((field, index) => (
+         {tieneVacunas && fields.length > 0 && fields.map((field, index) => (
             <div key={field.id} className="grid gap-6">
                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <FormField
                      control={form.control}
-                     name={`accidentes.${index}.tipo`}
+                     name={`vacunas.${index}.nombre_vacuna`}
                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                           <FormControl>
-                              <Input placeholder="Tipo de accidente" {...field} value={field.value ?? ""} />
-                           </FormControl>
+                        <FormItem>
+                           <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                 <SelectTrigger className="w-full min-w-0 truncate">
+                                    <SelectValue placeholder="Seleccione una vacuna" />
+                                 </SelectTrigger>
+                              </FormControl>
+                              <SelectContent position="popper" avoidCollisions={false}>
+                                 {selectOptions}
+                              </SelectContent>
+                           </Select>
                            {index === 0 && (
                               <FormDescription className='text-sm italic text-muted-foreground'>
-                                 Ej: Caída, Quemadura, Fractura...
+                                 Especifique una vacuna. Ej: Pfizer, Moderna, Astrazeneca, Janssen
                               </FormDescription>
                            )}
+                           {/* <FormMessage /> */}
                         </FormItem>
                      )}
                   />
                   <FormField
                      control={form.control}
-                     name={`accidentes.${index}.gravedad`}
+                     name={`vacunas.${index}.dosis_suministradas`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
                            <FormControl>
-                              <Input placeholder="Gravedad del accidente" {...field} value={field.value ?? ""} />
+                              <Input type='number' placeholder="Dosis suministradas" {...field} value={field.value ?? ""} />
                            </FormControl>
                            {index === 0 && (
                               <FormDescription className='text-sm italic text-muted-foreground'>
-                                 Ej: Leve, Moderada, Grave.
+                                 Cuantas dosis recibio de esta vacuna?.
                               </FormDescription>
                            )}
+                           {/* <FormMessage /> */}
                         </FormItem>
                      )}
                   />
                   <FormField
                      control={form.control}
-                     name={`accidentes.${index}.fecha`}
+                     name={`vacunas.${index}.fecha`}
                      render={({ field }) => (
                         <FormItem className="flex-1">
                            <FormControl>
@@ -115,15 +139,15 @@ export function Accidentes({ form }: FormInputProps) {
          ))}
 
          {/* Botón para agregar */}
-         {tieneAccidentes && (
+         {tieneVacunas && (
             <div className="flex justify-start">
                <Button
                   type="button"
-                  onClick={() => append({ tipo: "", gravedad: "", fecha: new Date() })}
+                  onClick={() => append({ nombre_vacuna: "", dosis_suministradas: 0, fecha: new Date() })}
                   className="w-auto justify-self-start flex bg-secondary-foreground hover:bg-secondary-foreground/90"
                >
                   <Plus />
-                  <span>Agregar accidente</span>
+                  <span>Agregar vacuna</span>
                </Button>
             </div>
          )}
@@ -131,4 +155,4 @@ export function Accidentes({ form }: FormInputProps) {
    )
 }
 
-export default Accidentes
+export default Vacunas

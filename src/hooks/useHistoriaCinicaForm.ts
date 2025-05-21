@@ -13,8 +13,8 @@ export function useHistoriaClinicaForm() {
          consume_medicamentos: false,
          tiene_accidentes: false,
          consume_psicoactivos: false,
-         // habito_fumar: false,
-         // habito_licor: false,
+         habito_fumar: false,
+         habito_licor: false,
       },
       shouldUnregister: true,
    });

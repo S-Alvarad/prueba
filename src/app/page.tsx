@@ -7,6 +7,7 @@ import { LoaderSkeleton } from "@/components/loader-skeleton"
 const PersonaForm = React.lazy(() => import('@/components/forms/persona/PersonaForm'))
 const ConyugeForm = React.lazy(() => import('@/components/forms/conyuge/ConyugeForm'))
 const HistoriaClinicaForm = React.lazy(() => import('@/components/forms/historia-clinica/HistoriaClinicaForm'))
+const VacunaCovidForm = React.lazy(() => import('@/components/forms/vacuna-covid/VacunaCovidForm'))
 
 import { usePersistentCedula } from '@/hooks/utils/usePersistentCedula'
 
@@ -76,7 +77,15 @@ export default function FomPage() {
                         <HistoriaClinicaForm
                            onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}    // Llamar cuando se termine todo
-                           isLastStep={true}                // Llamar cuando se termine todo
+                           // isLastStep={true}                // Llamar cuando se termine todo
+                           cedula={cedula}
+                        />
+                     )}
+                     {step === 4 && (
+                        <VacunaCovidForm
+                           onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
+                           resetFormStep={resetFormStep}    // Llamar cuando se termine todo
+                           // isLastStep={true}                // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils"
 import { submitForm } from '@/lib/submitForm'
 
-import { HeartPlus, Loader2, Send, Info } from "lucide-react"
+import { HeartPlus, Loader2, ChevronsRight, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
@@ -59,7 +59,7 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
          ...values,
          num_documento_persona: cedula, // agregamos la cedula al payload
       };
-      console.log(payload);
+      console.log('submit:', payload);
 
       // Funcion onSubmit reutilizable
       submitForm<historiaCinicaSchemaType>({
@@ -155,7 +155,7 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
                                  </>
                               ) : (
                                  <>
-                                    <Send /> Enviar
+                                    <ChevronsRight /> Continuar
                                  </>
                               )}
                            </Button>

@@ -4,7 +4,6 @@ export const enum_tipo_documento = [
    { label: "Cedula de Extranjeria", value: "CE" },
    { label: "Pasaporte", value: "PPT" },
 ];
-
 export const enum_tipo_rh = [
    { label: "O+", value: "O+" },
    { label: "O-", value: "O-" },
@@ -23,12 +22,10 @@ export const enum_estado_civil = [
    { label: "Separado", value: "SEPARADO" },
    { label: "Union libre", value: "UNION LIBRE" },
 ];
-
 export const enum_sexo = [
    { label: "Masculino", value: "M" },
    { label: "Femenino", value: "F" },
 ];
-
 export const enum_tipo_sangre = [
    { label: "O+", value: "O+" },
    { label: "O-", value: "O-" },
@@ -39,7 +36,6 @@ export const enum_tipo_sangre = [
    { label: "AB+", value: "AB+" },
    { label: "AB-", value: "AB-" },
 ];
-
 export const paises = [
    { label: "Argentina", value: "argentina" },
    { label: "Bolivia", value: "bolivia" },
@@ -62,7 +58,6 @@ export const paises = [
    { label: "Uruguay", value: "uruguay" },
    { label: "Venezuela", value: "venezuela" },
 ];
-
 export const departamentos = [
    { label: "Antioquia", value: "antioquia" },
    { label: "Bogotá", value: "bogota" },
@@ -70,7 +65,6 @@ export const departamentos = [
    { label: "Valle del Cauca", value: "valle del cauca" },
    { label: "Atlántico", value: "atlantico" },
 ];
-
 export const ciudades = [
    { label: "Medellín", value: "medellin", departamento: "antioquia" },
    { label: "Bello", value: "bello", departamento: "antioquia" },
@@ -91,3 +85,15 @@ export const ciudades = [
    { label: "Malambo", value: "malambo", departamento: "atlantico" },
    { label: "Sabanalarga", value: "sabanalarga", departamento: "atlantico" },
 ];
+export const enum_vacunas_covid = [
+   { value: "pfizer", label: "Pfizer" },
+   { value: "moderna", label: "Moderna" },
+   { value: "astrazeneca", label: "AstraZeneca" },
+   { value: "janssen", label: "Johnson & Johnson" },
+   { value: "sinovac", label: "Sinovac" },
+   { value: "sinopharm", label: "Sinopharm" },
+   { value: "covaxin", label: "Covaxin" },
+   { value: "sputnik", label: "Sputnik V" },
+   { value: "novavax", label: "Novavax" },
+   { value: "otra", label: "Otra / No especificada" },
+]

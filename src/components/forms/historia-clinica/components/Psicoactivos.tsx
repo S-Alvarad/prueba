@@ -103,7 +103,7 @@ export function Psicoactivos({ form }: FormInputProps) {
                   className="w-auto justify-self-start flex bg-secondary-foreground hover:bg-secondary-foreground/90"
                >
                   <Plus />
-                  <span>Agregar enfermedad</span>
+                  <span>Agregar psicoactivo</span>
                </Button>
             </div>
          )}

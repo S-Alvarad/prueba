@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
 
-import { UserRound, Loader2, Send } from "lucide-react"
+import { UserRound, Loader2, ChevronsRight } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
@@ -194,7 +194,7 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
                                  </>
                               ) : (
                                  <>
-                                    <Send /> Enviar
+                                    <ChevronsRight /> Continuar
                                  </>
                               )}
                            </Button>
