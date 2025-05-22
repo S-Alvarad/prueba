@@ -37,17 +37,6 @@ export function VacunaCovidForm({ className, onSubmitDone, resetFormStep, isLast
    // 1. Define tu formulario.
    const form = useVacunasCovidForm();
 
-   // 🔍 logFormErrorsEffect
-   useEffect(() => {
-      if (form.formState.errors) {
-         const errors = form.formState.errors;
-         if (Object.keys(errors).length > 0) {
-            console.log("validador:", form.formState.errors);
-            toast.error("Por favor, completa los campos obligatorios.");
-         }
-      }
-   }, [form.formState.errors]);
-
    // 2. Define un controlador de envío.
    async function onSubmit(values: vacunasCovidSchemaType) {
       // Combina los valores del formulario con la cedula que viene del padre
@@ -55,7 +44,7 @@ export function VacunaCovidForm({ className, onSubmitDone, resetFormStep, isLast
          ...values,
          num_documento_persona: cedula, // agregamos la cedula al payload
       };
-      console.log(payload);
+      console.table({ submitFormPayload: payload });
 
       // Funcion onSubmit reutilizable
       submitForm<vacunasCovidSchemaType>({

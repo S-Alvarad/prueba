@@ -43,7 +43,7 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
       if (form.formState.errors) {
          const errors = form.formState.errors;
          if (Object.keys(errors).length > 0) {
-            console.log(form.formState.errors);
+            console.table({ errores: form.formState.errors });
             toast.error("Por favor, completa los campos obligatorios.");
          }
       }
@@ -56,9 +56,7 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
       setLoading(true);
 
       try {
-         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL === "http://192.168.120.79:4000"
-            ? "http://localhost:4000"
-            : process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
          // const response = await fetch(`http://192.168.120.79:4000/api/persona`, {
          const response = await fetch(`${API_BASE_URL}/api/persona`, {

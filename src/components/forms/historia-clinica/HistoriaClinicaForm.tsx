@@ -42,15 +42,15 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
    const form = useHistoriaClinicaForm();
 
    // 🔍 logFormErrorsEffect
-   // useEffect(() => {
-   //    if (form.formState.errors) {
-   //       const errors = form.formState.errors;
-   //       if (Object.keys(errors).length > 0) {
-   //          console.log("validador:", form.formState.errors);
-   //          toast.error("Por favor, completa los campos obligatorios.");
-   //       }
-   //    }
-   // }, [form.formState.errors]);
+   useEffect(() => {
+      if (form.formState.errors) {
+         const errors = form.formState.errors;
+         if (Object.keys(errors).length > 0) {
+            console.log("validador:", form.formState.errors);
+            toast.error("Por favor, completa los campos obligatorios.");
+         }
+      }
+   }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
    async function onSubmit(values: historiaCinicaSchemaType) {
@@ -59,7 +59,7 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
          ...values,
          num_documento_persona: cedula, // agregamos la cedula al payload
       };
-      console.log('submit:', payload);
+      console.table({ submitFormPayload: payload });
 
       // Funcion onSubmit reutilizable
       submitForm<historiaCinicaSchemaType>({
@@ -96,7 +96,7 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
                               <Info className="h-4 w-4" />
                               <AlertTitle>La siguiente información <strong>NO</strong> es obligatoria!</AlertTitle>
                               <AlertDescription className="italic">
-                                 Puede omitir su diligenciamiento.
+                                 Puede omitir su diligenciamiento dando click en el botón "Continuar" al final.
                               </AlertDescription>
                            </Alert>
                            <FormField

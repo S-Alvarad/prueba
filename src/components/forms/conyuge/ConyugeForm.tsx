@@ -20,7 +20,7 @@ import { ConyugeSchemaType } from '@/schemas/conyugeSchema'
 
 // Importa aquí las secciones del formulario.
 import { DatosBasicos } from '@/components/forms/conyuge/components/DatosBasicos'
-import { Direcciones } from '@/components/forms/conyuge/components/Direcciones'
+import { DireccionResidencia } from '@/components/forms/conyuge/components/DireccionResidencia'
 import { DatosSecundarios } from '@/components/forms/conyuge/components/DatosSecundarios'
 import { LugarNacimiento } from '@/components/forms/conyuge/components/LugarNacimiento'
 
@@ -40,15 +40,15 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
    const form = useConyugeForm();
 
    // 🔍 logFormErrorsEffect
-   // useEffect(() => {
-   //    if (form.formState.errors) {
-   //       const errors = form.formState.errors;
-   //       if (Object.keys(errors).length > 0) {
-   //          console.log("validador:", form.formState.errors);
-   //          toast.error("Por favor, completa los campos obligatorios.");
-   //       }
-   //    }
-   // }, [form.formState.errors]);
+   useEffect(() => {
+      if (form.formState.errors) {
+         const errors = form.formState.errors;
+         if (Object.keys(errors).length > 0) {
+            console.log(errors);
+            toast.error("Por favor, completa los campos obligatorios.");
+         }
+      }
+   }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
    const onSubmit = (values: ConyugeSchemaType) => {
@@ -57,6 +57,7 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
          ...values,
          num_documento_persona: cedula, // agregamos la cedula al payload
       };
+      console.table({ submitFormPayload: payload });
 
       // Funcion onSubmit reutilizable
       submitForm<ConyugeSchemaType>({
@@ -93,13 +94,13 @@ function ConyugeForm({ className, onSubmitDone, resetFormStep, isLastStep, cedul
                               <Info className="h-4 w-4" />
                               <AlertTitle>La siguiente información <strong>NO</strong> es obligatoria!</AlertTitle>
                               <AlertDescription className="italic">
-                                 Puede omitir su diligenciamiento.
+                                 Puede omitir su diligenciamiento dando click en el botón "Continuar" al final.
                               </AlertDescription>
                            </Alert>
                            <DatosBasicos form={form} />
-                           <Direcciones form={form} />
-                           <DatosSecundarios form={form} />
+                           <DireccionResidencia form={form} />
                            <LugarNacimiento form={form} />
+                           <DatosSecundarios form={form} />
                            <Separator />
                            <Button type="submit" className="w-auto" disabled={loading}>
                               {loading ? (

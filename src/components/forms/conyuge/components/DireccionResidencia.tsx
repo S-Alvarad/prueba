@@ -2,8 +2,11 @@
 
 import { UseFormReturn } from "react-hook-form"
 
+import { Info } from "lucide-react"
+
 import { Input } from "@/components/ui/input"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
 
 import { ConyugeSchemaType } from '@/schemas/conyugeSchema'
 
@@ -11,13 +14,16 @@ interface FormInputProps {
    form: UseFormReturn<ConyugeSchemaType>
 }
 
-export function Direcciones({ form }: FormInputProps) {
+export function DireccionResidencia({ form }: FormInputProps) {
    return (
       <>
-         <blockquote className="border-l-4 italic pl-6 dark:border-l-emerald-400 border-l-emerald-600">
-            Direccion de residencia del conyuge
-            <p className="italic text-sm text-muted-foreground">direccion donde vive tu conyuge Ej: Cra. 8 #10-47, Barrio La Merced, Cali, Valle del Cauca </p>
-         </blockquote>
+         <Alert className="bg-muted">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Direccion de residencia</AlertTitle>
+            <AlertDescription className="italic">
+               direccion donde tu conuyge Ej: Cra. 8 #10-47, Barrio La Merced, Cali, Valle del Cauca
+            </AlertDescription>
+         </Alert>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <FormField
                control={form.control}
@@ -28,10 +34,13 @@ export function Direcciones({ form }: FormInputProps) {
                      <FormControl>
                         <Input {...field} placeholder="Ej: Cra. 8 #10-47" style={{ fontStyle: 'italic' }} />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.direccion_residencia?.direccion ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -44,10 +53,13 @@ export function Direcciones({ form }: FormInputProps) {
                      <FormControl>
                         <Input {...field} placeholder="Ej: Barrio La Merced" style={{ fontStyle: 'italic' }} />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.direccion_residencia?.barrio ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -60,10 +72,13 @@ export function Direcciones({ form }: FormInputProps) {
                      <FormControl>
                         <Input {...field} placeholder="Ej: Cali" style={{ fontStyle: 'italic' }} />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.direccion_residencia?.ciudad ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -76,10 +91,13 @@ export function Direcciones({ form }: FormInputProps) {
                      <FormControl>
                         <Input {...field} placeholder="Ej: Valle del cauca" style={{ fontStyle: 'italic' }} />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.direccion_residencia?.departamento ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />

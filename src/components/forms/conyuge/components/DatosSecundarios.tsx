@@ -6,7 +6,7 @@ import { Info } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 import { ConyugeSchemaType } from '@/schemas/conyugeSchema'
@@ -30,10 +30,13 @@ export function DatosSecundarios({ form }: FormInputProps) {
                      <FormControl>
                         <Input type="number" {...field} placeholder="Ingresa tu No° Celular" />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.celular ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -46,10 +49,13 @@ export function DatosSecundarios({ form }: FormInputProps) {
                      <FormControl>
                         <Input type="number" {...field} placeholder="Ingresa tu telefono fijo" />
                      </FormControl>
-                     <FormDescription className="text-sm italic text-muted-foreground">
-                        {/* Este campo no es obligatorio. */}
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.telefono ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic text-muted-foreground">
+                           Este campo no es obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -81,10 +87,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                <>
                   <Alert variant="emerald">
                      <Info className="h-4 w-4" />
-                     <AlertTitle>Complete esta sección solo si su cónyuge tiene empleo.</AlertTitle>
-                     <AlertDescription className="italic">
-                        De lo contrario, puede dejar los campos vacíos.
-                     </AlertDescription>
+                     <AlertTitle>Esta sección solo aplica si su cónyuge tiene empleo.</AlertTitle>
                   </Alert>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                      <FormField
@@ -94,28 +97,116 @@ export function DatosSecundarios({ form }: FormInputProps) {
                            <FormItem>
                               <FormLabel>Nombre de la empresa</FormLabel>
                               <FormControl>
-                                 <Input type="number" {...field} placeholder="Ingresa No° numero de hijos" />
+                                 <Input
+                                    type="text"
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    placeholder="Ingresa el nombre de la empresa"
+                                 />
                               </FormControl>
-                              {/* <FormMessage /> */}
-                              <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                                 Campo obligatorio.
-                              </p>
+                              {form.getFieldState("empresa.nombre_empresa").error ? (
+                                 <FormMessage />
+                              ) : (
+                                 <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                                    Campo obligatorio.
+                                 </FormDescription>
+                              )}
                            </FormItem>
                         )}
                      />
                      <FormField
                         control={form.control}
-                        name="empresa.nombre_empresa"
+                        name="empresa.direccion_empresa"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>Nombre de la empresa</FormLabel>
+                              <FormLabel>Dirección de la empresa</FormLabel>
                               <FormControl>
-                                 <Input type="number" {...field} placeholder="Ingresa No° numero de hijos" />
+                                 <Input
+                                    type="text"
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    placeholder="Ingresa la dirección de la empresa"
+                                 />
                               </FormControl>
-                              {/* <FormMessage /> */}
-                              <p className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                                 Campo obligatorio.
-                              </p>
+                              {form.getFieldState("empresa.direccion_empresa").error ? (
+                                 <FormMessage />
+                              ) : (
+                                 <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                                    Campo obligatorio.
+                                 </FormDescription>
+                              )}
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="empresa.tipo_de_empresa"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Tipo de empresa</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="text"
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    placeholder="Ingresa el tipo de empresa"
+                                 />
+                              </FormControl>
+                              {form.getFieldState("empresa.tipo_de_empresa").error ? (
+                                 <FormMessage />
+                              ) : (
+                                 <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                                    Campo obligatorio.
+                                 </FormDescription>
+                              )}
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="empresa.telefono_empresa"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Teléfono de la empresa</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="number"
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    placeholder="Ingresa el teléfono de la empresa"
+                                 />
+                              </FormControl>
+                              {form.getFieldState("empresa.telefono_empresa").error ? (
+                                 <FormMessage />
+                              ) : (
+                                 <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                                    Campo obligatorio.
+                                 </FormDescription>
+                              )}
+                           </FormItem>
+                        )}
+                     />
+                     <FormField
+                        control={form.control}
+                        name="empresa.ciudad_empresa"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Ciudad de la empresa</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="text"
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    placeholder="Ingresa la ciudad de la empresa"
+                                 />
+                              </FormControl>
+                              {form.getFieldState("empresa.ciudad_empresa").error ? (
+                                 <FormMessage />
+                              ) : (
+                                 <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                                    Campo obligatorio.
+                                 </FormDescription>
+                              )}
                            </FormItem>
                         )}
                      />

@@ -1,5 +1,6 @@
 "use client"
 import React, { Suspense, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { LoaderSkeleton } from "@/components/loader-skeleton"
@@ -11,10 +12,11 @@ const VacunaCovidForm = React.lazy(() => import('@/components/forms/vacuna-covid
 
 import { usePersistentCedula } from '@/hooks/utils/usePersistentCedula'
 
-export default function FomPage() {
+export default function FormPage() {
    const [step, setStep] = useState(1);
    const [delayPassed, setDelayPassed] = useState(false);
    const [cedula, setCedula] = usePersistentCedula();
+   const router = useRouter();
 
    // Leer el step desde localStorage al montar (solo en cliente)
    useEffect(() => {
@@ -44,8 +46,9 @@ export default function FomPage() {
       if (typeof window !== "undefined") {
          localStorage.setItem("formStep", "1");
       }
-      setStep(1);
       setCedula(null); // Esto borra de localStorage también
+      setStep(1); // Reinicia el formulario al paso 1
+      router.push("/resume"); // Redirige al final
    }
 
    return (
@@ -77,7 +80,7 @@ export default function FomPage() {
                         <HistoriaClinicaForm
                            onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}    // Llamar cuando se termine todo
-                           // isLastStep={true}                // Llamar cuando se termine todo
+                           isLastStep={true}                // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}
