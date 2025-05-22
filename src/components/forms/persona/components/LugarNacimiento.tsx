@@ -4,7 +4,7 @@ import { UseFormReturn } from "react-hook-form"
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 
 import { Input } from "@/components/ui/input"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
 
 import { paises, departamentos, ciudades } from '@/constants/enums'
 
@@ -37,10 +37,13 @@ export function LugarNacimiento({ form }: FormInputProps) {
                            <option value="No hay opciones disponibles" disabled />
                         )}
                      </datalist>
-                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                        Campo obligatorio.
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.pais_nacimiento ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
@@ -65,10 +68,9 @@ export function LugarNacimiento({ form }: FormInputProps) {
                            <option value="No hay opciones disponibles" disabled />
                         )}
                      </datalist>
-                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                        Campo obligatorio.
+                     <FormDescription className="text-sm italic text-muted-foreground">
+                        Este campo no es obligatorio.
                      </FormDescription>
-                     {/* <FormMessage /> */}
                   </FormItem>
                )}
             />
@@ -93,10 +95,13 @@ export function LugarNacimiento({ form }: FormInputProps) {
                            <option value="No hay opciones disponibles" disabled />
                         )}
                      </datalist>
-                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                        Campo obligatorio.
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.ciudad_nacimiento ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />

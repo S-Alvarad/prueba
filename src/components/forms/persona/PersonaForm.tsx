@@ -20,7 +20,8 @@ import { PersonaSchemaType } from '@/schemas/personaSchema'
 import { DatosBasicos } from '@/components/forms/persona/components/DatosBasicos'
 import { LugarNacimiento } from '@/components/forms/persona/components/LugarNacimiento'
 import { DatosSecundarios } from '@/components/forms/persona/components/DatosSecundarios'
-import { Direcciones } from '@/components/forms/persona/components/Direcciones'
+import { DireccionResidencia } from '@/components/forms/persona/components/DireccionResidencia'
+import { DireccionCorrespondencia } from '@/components/forms/persona/components/DireccionCorrespondencia'
 
 import { Loader } from '@/components/loader'
 
@@ -49,72 +50,18 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
    }, [form.formState.errors]);
 
    // 2. Define un controlador de envío.
-   // async function onSubmit(values: PersonaSchemaType) {
-   //    setLoading(true);
-   //    try {
-   //       const response = await fetch("http://localhost:4000/api/persona", {
-   //          method: "POST",
-   //          headers: {
-   //             "Content-Type": "application/json",
-   //          },
-   //          body: JSON.stringify(values),
-   //       });
-
-   //       const data = await response.json();
-
-   //       if (!response.ok) {
-   //          toast.info("Error en la solicitud!", {
-   //             description: data.message || "Ocurrió un error inesperado.",
-   //             duration: 5000,
-   //          });
-   //          setLoading(false); // ❗️ Ocultamos loader en caso de error
-   //          return; // Salimos para NO continuar abajo
-   //       }
-
-   //       // Dentro del submit
-   //       setTimeout(() => {
-   //          setLoading(false);
-   //          console.log("Respuesta del servidor:", data);
-   //          form.reset();
-
-   //          toast.success("Datos guardados correctamente!", {
-   //             description: isLastStep
-   //                ? "Hoja de vida finalizada"
-   //                : "Continuemos!",
-   //             duration: 2000, // puedes acortar la duración
-   //          });
-
-   //          // Espera a que el toast se vea, luego cambia el step
-   //          setTimeout(() => {
-   //             // onSubmitDone(); // Avanza al siguiente paso
-   //             if (isLastStep) {
-   //                resetFormStep();                     // vuelve a step 1
-   //             } else {
-   //                onSubmitDone();                      // pasa al step siguiente
-   //             }
-   //          }, 2000); // misma duración que el toast
-   //       }, 2000); // Espera inicial opcional
-
-   //    } catch (error: any) {
-   //       console.error("Error al enviar datos:", error);
-   //       toast.error("Error al guardar los datos!", {
-   //          description: error?.message || "Ocurrió un error inesperado.",
-   //          duration: 5000,
-   //       });
-   //       setLoading(false); // ❗️ También ocultamos loader si entra en catch
-   //    }
-   // }
-
    async function onSubmit(values: PersonaSchemaType) {
       setCedula(values.num_documento); // ⬅️ Aquí compartes el dato al componente padre app/page.tsx
 
       setLoading(true);
 
       try {
-         // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL === "http://192.168.120.79:4000"
+            ? "http://localhost:4000"
+            : process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-         // const response = await fetch(`${API_BASE_URL}/api/persona`, {
-         const response = await fetch(`http://192.168.120.79:4000/api/persona`, {
+         // const response = await fetch(`http://192.168.120.79:4000/api/persona`, {
+         const response = await fetch(`${API_BASE_URL}/api/persona`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -184,8 +131,8 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
                            <DatosBasicos form={form} />
                            <LugarNacimiento form={form} />
                            <DatosSecundarios form={form} />
-                           <Direcciones form={form} tipo="residencia" />
-                           <Direcciones form={form} tipo="correspondencia" />
+                           <DireccionResidencia form={form} />
+                           <DireccionCorrespondencia form={form} />
                            <Separator />
                            <Button type="submit" className="w-auto" disabled={loading}>
                               {loading ? (

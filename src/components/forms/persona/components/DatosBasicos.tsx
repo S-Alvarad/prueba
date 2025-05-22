@@ -1,20 +1,18 @@
 "use client"
 
+import { useMemo, useState } from "react";
 import { UseFormReturn } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
-
-import { FormInput } from '@/components/FormInput'
-import { FormSelect } from '@/components/FormSelect'
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 import { enum_tipo_documento } from '@/constants/enums'
@@ -24,16 +22,48 @@ interface FormInputProps {
 }
 
 export function DatosBasicos({ form }: FormInputProps) {
+   const [open, setOpen] = useState(false);
+
+   const selectOptions = useMemo(() => {
+      return enum_tipo_documento.length > 0
+         ? enum_tipo_documento.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+               {option.label}
+            </SelectItem>
+         ))
+         : (
+            <SelectItem value="No hay opciones disponibles" disabled />
+         );
+   }, []); // ✅ Solo recalcula si cambia el array
+
    return (
       <>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <FormSelect<PersonaSchemaType>
-               form={form}
+            <FormField
+               control={form.control}
                name="tipo_documento"
-               label="Tipo de documento"
-               array={enum_tipo_documento}
-               placeholder="Seleccione un documento"
-               description="Campo obligatorio."
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Tipo de documento</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                           <SelectTrigger className="w-full min-w-0 truncate">
+                              <SelectValue placeholder="Seleccione un documento" />
+                           </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper" avoidCollisions={false}>
+                           {selectOptions}
+                        </SelectContent>
+                     </Select>
+                     {form.formState.errors.tipo_documento ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
+                  </FormItem>
+               )}
             />
             <FormField
                control={form.control}
@@ -42,39 +72,86 @@ export function DatosBasicos({ form }: FormInputProps) {
                   <FormItem>
                      <FormLabel>Número de documento</FormLabel>
                      <FormControl>
-                        <Input type="number" {...field} placeholder="Ingresa tu número de documento" />
+                        <Input type="number" placeholder="Ingresa tu número de documento" {...field} />
                      </FormControl>
-                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                        Campo obligatorio.
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.num_documento ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />
-            <FormInput<PersonaSchemaType>
-               form={form}
+            <FormField
+               control={form.control}
                name="primer_nombre"
-               label="Primer nombre"
-               placeholder="Ingresa tu primer nombre"
-               description="Campo obligatorio."
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Primer nombre</FormLabel>
+                     <FormControl>
+                        <Input placeholder="Ingresa tu primer nombre" {...field} />
+                     </FormControl>
+                     {form.formState.errors.primer_nombre ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
+                  </FormItem>
+               )}
             />
-            <div className="grid gap-2">
-               <Label htmlFor="segundo_nombre">Segundo nombre</Label>
-               <Input id="segundo_nombre" placeholder="Ingresa tu primer nombre" {...form.register("segundo_nombre")} />
-               <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
-            </div>
-            <FormInput<PersonaSchemaType>
-               form={form}
+            <FormField
+               control={form.control}
+               name="segundo_nombre"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Segundo nombre</FormLabel>
+                     <FormControl>
+                        <Input placeholder="Ingresa tu segundo nombre" {...field} />
+                     </FormControl>
+                     <FormDescription className="text-sm italic text-muted-foreground">
+                        Este campo no es obligatorio.
+                     </FormDescription>
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
                name="primer_apellido"
-               label="Primer apellido"
-               placeholder="Ingresa tu primer nombre"
-               description="Campo obligatorio."
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Primer apellido</FormLabel>
+                     <FormControl>
+                        <Input placeholder="Ingresa tu primer apellido" {...field} />
+                     </FormControl>
+                     {form.formState.errors.primer_apellido ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
+                  </FormItem>
+               )}
             />
-            <div className="grid gap-2">
-               <Label htmlFor="segundo_apellido">Segundo apellido</Label>
-               <Input id="segundo_apellido" placeholder="Ingresa tu segundo apellido" {...form.register("segundo_apellido")} />
-               <p className="text-sm italic text-muted-foreground">Este campo no es obligatorio.</p>
-            </div>
+            <FormField
+               control={form.control}
+               name="segundo_apellido"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Segundo apellido</FormLabel>
+                     <FormControl>
+                        <Input placeholder="Ingresa tu segundo apellido" {...field} />
+                     </FormControl>
+                     <FormDescription className="text-sm italic text-muted-foreground">
+                        Este campo no es obligatorio.
+                     </FormDescription>
+                  </FormItem>
+               )}
+            />
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* <div className="grid gap-2">
@@ -99,7 +176,7 @@ export function DatosBasicos({ form }: FormInputProps) {
                render={({ field }) => (
                   <FormItem className="flex flex-col">
                      <FormLabel>Fecha de nacimiento</FormLabel>
-                     <Popover>
+                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                            <FormControl>
                               <Button
@@ -111,9 +188,9 @@ export function DatosBasicos({ form }: FormInputProps) {
                                  )}
                               >
                                  {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(field.value, "dd/MM/yyyy")
                                  ) : (
-                                    <span>YYYY-MM-DD</span>
+                                    <span>dd/mm/aaaa</span>
                                  )}
                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
@@ -123,21 +200,30 @@ export function DatosBasicos({ form }: FormInputProps) {
                            <Calendar
                               mode="single"
                               selected={field.value}
-                              onSelect={field.onChange}
+                              onSelect={(date) => {
+                                 field.onChange(date);
+                                 setOpen(false); // ✅ cierra el Popover al seleccionar
+                              }}
                               disabled={(date) =>
-                                 date > new Date() || date < new Date("1900-01-01")
+                                 date > new Date(new Date().setFullYear(new Date().getFullYear() - 15)) ||
+                                 date < new Date("1900-01-01")
                               }
                               initialFocus
                               captionLayout="dropdown-buttons"
                               fromYear={1990}
-                              toYear={2025}
+                              toYear={new Date().getFullYear()}
                            />
                         </PopoverContent>
                      </Popover>
-                     <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
-                        Campo obligatorio.
-                     </FormDescription>
-                     {/* <FormMessage /> */}
+                     {form.formState.errors.fecha_nacimiento?.message === "Invalid date" ? (
+                        <FormDescription className="text-destructive text-sm">
+                           Este campo es obligatorio.
+                        </FormDescription>
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
                   </FormItem>
                )}
             />

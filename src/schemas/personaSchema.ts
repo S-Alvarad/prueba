@@ -2,13 +2,13 @@ import { z } from "zod"
 import { enum_tipo_documento, enum_sexo, enum_tipo_rh, enum_estado_civil } from '@/constants/enums'
 
 const LugarNacimientoSchema = z.object({
-   pais_nacimiento: z.string({
-      required_error: "El campo es obligatorio."
-   }).transform(val => val.toUpperCase()).optional(),
+   pais_nacimiento: z.string().min(1, {
+      message: "El campo es obligatorio.",
+   }).transform(val => val.toUpperCase()),
    departamento_nacimiento: z.string().transform(val => val.toUpperCase()).optional(),
-   ciudad_nacimiento: z.string({
-      required_error: "El campo es obligatorio."
-   }).transform(val => val.toUpperCase()).optional(),
+   ciudad_nacimiento: z.string().min(1, {
+      message: "El campo es obligatorio.",
+   }).transform(val => val.toUpperCase()),
 });
 const DireccionResidenciaSchema = z.object({
    barrio: z.string({
@@ -57,14 +57,14 @@ const DatosSecundariosSchema = z.object({
       }),
    celular: z.string()
       .min(1, { message: "Este campo es obligatorio" })
-      .length(10, { message: "Debe tener 10 dígitos" }) // Exactamente 10 dígitos
-      .regex(/^\d+$/, { message: "Debe contener solo números" }),
-   telefono: z.string()
-      .regex(/^\d+$/, { message: "Debe contener solo números" })
-      .min(7, { message: "Debe tener al menos 7 dígitos" })
-      .max(10, { message: "Debe tener máximo 10 dígitos" })
-      .or(z.literal(""))
-      .optional(),
+      .length(10, { message: "Debe tener 10 dígitos" }), // Exactamente 10 dígitos
+   telefono: z.union([
+      z.literal(""), // permite vacío
+      z
+         .string()
+         .min(7, { message: "Debe tener al menos 7 dígitos" })
+         .max(10, { message: "Debe tener máximo 10 dígitos" }),
+   ]).optional(), // también permite undefined
 });
 const tieneHijosSchema = z.discriminatedUnion("tiene_hijos", [
    z.object({
@@ -100,7 +100,7 @@ export const PersonaSchema = z.object({
    }).transform(val => val.toUpperCase()),
    segundo_apellido: z.string().transform(val => val.toUpperCase()).optional(),
    fecha_nacimiento: z.coerce.date({
-      required_error: "Este campo es obligatorio."
+      required_error: "Este campo es obligatorio.", message: "Este campo es obligatorio."
    }),
    direccion_residencia: DireccionResidenciaSchema,
    direccion_correspondencia: DireccionCorrespondenciaSchema,

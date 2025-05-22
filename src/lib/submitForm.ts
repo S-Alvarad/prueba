@@ -24,9 +24,12 @@ export async function submitForm<T extends FieldValues>({
    console.log(values);
 
    try {
-      // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL === "http://192.168.120.79:4000"
+            ? "http://localhost:4000"
+            : process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-      const response = await fetch(`http://192.168.120.79:4000/api/${endpoint}`, {
+      // const response = await fetch(`http://192.168.120.79:4000/api/${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
          method: "POST",
          headers: {
             "Content-Type": "application/json",
