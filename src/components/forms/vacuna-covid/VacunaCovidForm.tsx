@@ -1,18 +1,16 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils"
 import { submitForm } from '@/lib/submitForm'
 
 import { Syringe, Loader2, ChevronsRight, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { toast } from "sonner";
 
 // Hook
 import { useVacunasCovidForm } from '@/hooks/useVacunasCovidForm'

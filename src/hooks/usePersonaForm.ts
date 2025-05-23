@@ -8,6 +8,38 @@ export function usePersonaForm() {
    return useForm<PersonaSchemaType>({
       mode: "onBlur",
       resolver: zodResolver(PersonaSchema),
+      // defaultValues: {
+      //    tipo_documento: "",                  // Cédula de Ciudadanía
+      //    num_documento: "",
+      //    primer_nombre: "",
+      //    segundo_nombre: "",
+      //    primer_apellido: "",
+      //    segundo_apellido: "",
+      //    fecha_nacimiento: undefined,
+      //    pais_nacimiento: "",
+      //    departamento_nacimiento: "",
+      //    ciudad_nacimiento: "",
+      //    direccion_residencia: {
+      //       direccion: "",
+      //       barrio: "",
+      //       ciudad: "",
+      //       departamento: "",
+      //    },
+      //    direccion_correspondencia: {
+      //       direccion: "",
+      //       barrio: "",
+      //       ciudad: "",
+      //       departamento: "",
+      //    },
+      //    sexo: "",                           // M = Masculino, F = Femenino (según tus opciones)
+      //    tipo_sangre: "",                   // Ejemplo tipo de sangre
+      //    personas_a_cargo: "",
+      //    estado_civil: "",
+      //    celular: "",
+      //    telefono: "",
+      //    tiene_hijos: false,
+      // },
+
       defaultValues: {
          tipo_documento: "CC",                  // Cédula de Ciudadanía
          num_documento: "1234567890",
@@ -39,6 +71,7 @@ export function usePersonaForm() {
          telefono: "2223344",
          tiene_hijos: false,
       },
+      
       shouldUnregister: true,
    });
 }

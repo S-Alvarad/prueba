@@ -6,7 +6,7 @@ import { Info } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 
 import { PersonaSchemaType } from '@/schemas/personaSchema'
 

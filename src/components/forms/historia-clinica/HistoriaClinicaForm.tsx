@@ -96,7 +96,7 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
                               <Info className="h-4 w-4" />
                               <AlertTitle>La siguiente información <strong>NO</strong> es obligatoria!</AlertTitle>
                               <AlertDescription className="italic">
-                                 Puede omitir su diligenciamiento dando click en el botón "Continuar" al final.
+                                 Puede omitir su diligenciamiento dando click en el botón &quot;Continuar&quot; al final.
                               </AlertDescription>
                            </Alert>
                            <FormField

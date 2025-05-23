@@ -1,4 +1,5 @@
 "use client"
+
 import React, { Suspense, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -21,7 +22,7 @@ export default function FormPage() {
    // Leer el step desde localStorage al montar (solo en cliente)
    useEffect(() => {
       if (typeof window !== "undefined") {
-         const savedStep = localStorage.getItem("formStep")
+         const savedStep = localStorage.getItem("step")
          if (savedStep) {
             setStep(parseInt(savedStep, 10))
          }
@@ -31,7 +32,7 @@ export default function FormPage() {
    useEffect(() => {
       // Guardar step cada vez que cambie
       if (typeof window !== "undefined") {
-         localStorage.setItem("formStep", step.toString())
+         localStorage.setItem("step", step.toString())
       }
       setDelayPassed(false);
       const timeout = setTimeout(() => {
@@ -44,11 +45,18 @@ export default function FormPage() {
    // Resetear el formulario completamente
    const resetFormStep = () => {
       if (typeof window !== "undefined") {
-         localStorage.setItem("formStep", "1");
+         const cedula = localStorage.getItem("cedula"); // Obtiene la cédula guardada
+
+         // Luego limpia el estado y localStorage
+         localStorage.setItem("step", "1");
+         localStorage.removeItem("cedula");
+
+         setCedula(null); // Esto borra de localStorage también
+         setStep(1); // Reinicia el formulario al paso 1
+
+         // Redirige usando la cédula obtenida
+         router.push(`/comprobante?cedula=${cedula}`);
       }
-      setCedula(null); // Esto borra de localStorage también
-      setStep(1); // Reinicia el formulario al paso 1
-      router.push("/resume"); // Redirige al final
    }
 
    return (
@@ -80,24 +88,23 @@ export default function FormPage() {
                         <HistoriaClinicaForm
                            onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}    // Llamar cuando se termine todo
-                           isLastStep={true}                // Llamar cuando se termine todo
+                           // isLastStep={true}                // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}
                      {step === 4 && (
                         <VacunaCovidForm
-                           onSubmitDone={() => setStep(4)}  // Avanzar al siguiente paso
+                           onSubmitDone={() => setStep(5)}  // Avanzar al siguiente paso
                            resetFormStep={resetFormStep}    // Llamar cuando se termine todo
-                           // isLastStep={true}                // Llamar cuando se termine todo
+                           isLastStep={true}                // Llamar cuando se termine todo
                            cedula={cedula}
                         />
                      )}
-                     {/* VacunaCovidForm */}
                      {/* EstiloDeVidaForm */}
                      {/* ConocimientoForm */}
                      {/* ExperienciaLaboralForm */}
                      {/* SituacionGeneralForm */}
-                     {/* EducacionBasicaForm */}
+                     {/* EducacionBasicaForm -> vuela */}
                      {/* EducacionSuperiorForm */}
                      {/* ReferenciaFamiliarForm */}
                   </Suspense>
