@@ -42,7 +42,7 @@ export default function FormPage() {
       return () => clearTimeout(timeout);
    }, [step]);
 
-   // Resetear el formulario completamente
+   // 
    const resetFormStep = () => {
       if (typeof window !== "undefined") {
          const cedula = localStorage.getItem("cedula"); // Obtiene la cédula guardada

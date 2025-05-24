@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils"
 import { submitForm } from '@/lib/submitForm'
@@ -21,7 +21,16 @@ import { vacunasCovidSchemaType } from '@/schemas/vacunaCovidSchema'
 import { Vacunas } from '@/components/forms/vacuna-covid/components/vacunas'
 
 import { Loader } from '@/components/loader'
-
+import {
+   AlertDialog,
+   AlertDialogContent,
+   AlertDialogHeader,
+   AlertDialogTitle,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogCancel,
+   AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 type VacunaCovidFormProps = React.ComponentPropsWithoutRef<"div"> & {
    onSubmitDone: () => void;
    resetFormStep: () => void;
@@ -31,6 +40,11 @@ type VacunaCovidFormProps = React.ComponentPropsWithoutRef<"div"> & {
 
 export function VacunaCovidForm({ className, onSubmitDone, resetFormStep, isLastStep, cedula, ...props }: VacunaCovidFormProps) {
    const [loading, setLoading] = useState(false);
+   const [showDialog, setShowDialog] = useState(true);
+
+   useEffect(() => {
+      setShowDialog(true); // Mostrar automáticamente al montar
+   }, []);
 
    // 1. Define tu formulario.
    const form = useVacunasCovidForm();
@@ -59,6 +73,25 @@ export function VacunaCovidForm({ className, onSubmitDone, resetFormStep, isLast
    return (
       <>
          {loading && <Loader />}
+         <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+            <AlertDialogContent>
+               <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center space-x-2">
+                     <Info className="h-5 w-5" />
+                     <span>
+                        La siguiente información <strong>NO</strong> es obligatoria!
+                     </span>
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                     Puede omitir su diligenciamiento dando click en el botón <strong className="text-primary">&quot;Continuar&quot;</strong> al final de la pagina.
+                  </AlertDialogDescription>
+               </AlertDialogHeader>
+               <AlertDialogFooter>
+                  {/* <AlertDialogCancel onClick={() => setShowDialog(false)}>Cerrar</AlertDialogCancel> */}
+                  <AlertDialogAction onClick={() => setShowDialog(false)}>Entendido</AlertDialogAction>
+               </AlertDialogFooter>
+            </AlertDialogContent>
+         </AlertDialog>
          <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card className="gap-0 p-0">
                <CardHeader className="text-start flex items-center space-x-3 border-b-[1px] p-6">

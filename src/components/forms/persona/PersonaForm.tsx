@@ -80,7 +80,6 @@ export function PersonaForm({ className, onSubmitDone, resetFormStep, isLastStep
          }
 
          setTimeout(() => {
-            setLoading(false);
             form.reset();
 
             toast.success("Datos guardados correctamente!", {

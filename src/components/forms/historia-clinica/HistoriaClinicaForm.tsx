@@ -27,7 +27,16 @@ import { Accidentes } from '@/components/forms/historia-clinica/components/Accid
 import { Psicoactivos } from '@/components/forms/historia-clinica/components/Psicoactivos'
 
 import { Loader } from '@/components/loader'
-
+import {
+   AlertDialog,
+   AlertDialogContent,
+   AlertDialogHeader,
+   AlertDialogTitle,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogCancel,
+   AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 type HistoriaClinicaFormProps = React.ComponentPropsWithoutRef<"div"> & {
    onSubmitDone: () => void;
    resetFormStep: () => void;
@@ -37,6 +46,11 @@ type HistoriaClinicaFormProps = React.ComponentPropsWithoutRef<"div"> & {
 
 export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, isLastStep, cedula, ...props }: HistoriaClinicaFormProps) {
    const [loading, setLoading] = useState(false);
+   const [showDialog, setShowDialog] = useState(true);
+
+   useEffect(() => {
+      setShowDialog(true); // Mostrar automáticamente al montar
+   }, []);
 
    // 1. Define tu formulario.
    const form = useHistoriaClinicaForm();
@@ -76,6 +90,25 @@ export function HistoriaClinicaForm({ className, onSubmitDone, resetFormStep, is
    return (
       <>
          {loading && <Loader />}
+         <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+            <AlertDialogContent>
+               <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center space-x-2">
+                     <Info className="h-5 w-5" />
+                     <span>
+                        La siguiente información <strong>NO</strong> es obligatoria!
+                     </span>
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                     Puede omitir su diligenciamiento dando click en el botón <strong className="text-primary">&quot;Continuar&quot;</strong> al final de la pagina.
+                  </AlertDialogDescription>
+               </AlertDialogHeader>
+               <AlertDialogFooter>
+                  {/* <AlertDialogCancel onClick={() => setShowDialog(false)}>Cerrar</AlertDialogCancel> */}
+                  <AlertDialogAction onClick={() => setShowDialog(false)}>Entendido</AlertDialogAction>
+               </AlertDialogFooter>
+            </AlertDialogContent>
+         </AlertDialog>
          <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card className="gap-0 p-0">
                <CardHeader className="text-start flex items-center space-x-3 border-b-[1px] p-6">

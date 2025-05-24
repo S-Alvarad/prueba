@@ -25,7 +25,7 @@ export async function submitForm<T extends FieldValues>({
 
    try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
-      
+
       // const response = await fetch(`http://192.168.120.79:4000/api/${endpoint}`, {
       const response = await fetch(`${API_BASE_URL}/api/${endpoint}`, {
          method: "POST",
@@ -48,7 +48,6 @@ export async function submitForm<T extends FieldValues>({
       }
 
       setTimeout(() => {
-         setLoading(false);
          form.reset();
 
          toast.success("Datos guardados correctamente!", {
@@ -61,6 +60,7 @@ export async function submitForm<T extends FieldValues>({
                resetFormStep();
             } else {
                onSubmitDone();
+               setLoading(false);
             }
          }, 2000);
       }, 2000);
