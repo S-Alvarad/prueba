@@ -91,7 +91,7 @@ function SuccessCard({ cedula }: { cedula: string }) {
                      <p>Código: {cedula}</p>
                      <p>Publicado el: {new Date().toLocaleDateString()}</p>
                   </div>
-                  <div className="flex justify-center p-4 bg-muted rounded-md" ref={qrRef}>
+                  <div className="flex justify-center p-4 bg-muted rounded-md">
                      {text && <QRCode value={text} size={size} bgColor={bgColor} fgColor={fgColor} level="H" />}
                   </div>
                </CardContent>
@@ -112,6 +112,7 @@ function SuccessCard({ cedula }: { cedula: string }) {
       </div>
    )
 }
+
 export default function ComprobantePage() {
    const searchParams = useSearchParams();
    const cedula = searchParams.get('cedula');

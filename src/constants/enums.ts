@@ -89,7 +89,7 @@ export const enum_vacunas_covid = [
    { value: "pfizer", label: "Pfizer" },
    { value: "moderna", label: "Moderna" },
    { value: "astrazeneca", label: "AstraZeneca" },
-   { value: "janssen", label: "Johnson & Johnson" },
+   { value: "janssen", label: "Johnson & Johnson (janssen)" },
    { value: "sinovac", label: "Sinovac" },
    { value: "sinopharm", label: "Sinopharm" },
    { value: "covaxin", label: "Covaxin" },
