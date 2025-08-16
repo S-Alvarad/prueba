@@ -58,6 +58,7 @@ const DatosSecundariosSchema = z.object({
    celular: z.string()
       .min(1, { message: "Este campo es obligatorio" })
       .length(10, { message: "Debe tener 10 dígitos" }), // Exactamente 10 dígitos
+   correo: z.string().min(1, { message: "Este campo es obligatorio" }),
    telefono: z.union([
       z.literal(""), // permite vacío
       z

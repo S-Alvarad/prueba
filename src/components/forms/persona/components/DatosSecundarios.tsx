@@ -124,7 +124,7 @@ export function DatosSecundarios({ form }: FormInputProps) {
                )}
             />
          </div>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormField
                control={form.control}
                name="celular"
@@ -163,6 +163,27 @@ export function DatosSecundarios({ form }: FormInputProps) {
                   </FormItem>
                )}
             />
+            <FormField
+               control={form.control}
+               name="correo"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Correo electronico</FormLabel>
+                     <FormControl>
+                        <Input type="email" placeholder="Ingresa correo electronico" {...field} />
+                     </FormControl>
+                     {form.formState.errors.correo ? (
+                        <FormMessage />
+                     ) : (
+                        <FormDescription className="text-sm italic dark:text-emerald-400 text-emerald-600">
+                           Campo obligatorio.
+                        </FormDescription>
+                     )}
+                  </FormItem>
+               )}
+            />
+         </div>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
                control={form.control}
                name="personas_a_cargo"
