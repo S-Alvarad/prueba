@@ -32,7 +32,7 @@ export function usePersonaForm() {
             departamento: "",
          },
          sexo: "",                           // M = Masculino, F = Femenino (según tus opciones)
-         tipo_sangre: "",                   // Ejemplo tipo de sangre
+         tipo_sangre: "",                    // Ejemplo tipo de sangre
          personas_a_cargo: "",
          estado_civil: "",
          celular: "",
